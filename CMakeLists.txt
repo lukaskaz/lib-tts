@@ -19,4 +19,5 @@ include_directories(inc)
 file(GLOB SOURCES "src/*.cpp")
 
 add_library(${PROJECT_NAME} ${SOURCES})
+add_dependencies(${PROJECT_NAME} libshellcmd)
 target_link_libraries(${PROJECT_NAME} shellcmd Boost::filesystem)
