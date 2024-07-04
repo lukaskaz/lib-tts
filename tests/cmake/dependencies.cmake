@@ -52,7 +52,7 @@ EXTERNALPROJECT_ADD(
   GIT_REPOSITORY    https://github.com/lukaskaz/coverage-checker.git
   GIT_TAG           main
   PATCH_COMMAND     ""
-  PREFIX            ""
+  PREFIX            coveragechecker-workspace
   SOURCE_DIR        ${source_dir}
   BINARY_DIR        ""
   CONFIGURE_COMMAND ""
