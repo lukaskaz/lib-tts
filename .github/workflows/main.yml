@@ -77,4 +77,4 @@ jobs:
         cd tests && mkdir build && cd build && cmake .. && make
     - name: Running coverage checker
       run: |
-        cd tests && ./scripts/check-coverage.sh
+        cd tests && ./build/check-coverage.sh
