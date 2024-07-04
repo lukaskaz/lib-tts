@@ -6,18 +6,15 @@ using namespace testing;
 class TestCommand : public Test
 {
   public:
-    std::shared_ptr<NiceMock<CommandsMock>> commandMock;
+    std::shared_ptr<NiceMock<CommandsMock>> commandMock =
+        std::make_shared<NiceMock<CommandsMock>>();
 
   protected:
     void SetUp() override
-    {
-        commandMock = std::make_shared<NiceMock<CommandsMock>>();
-    }
+    {}
 
     void TearDown() override
-    {
-        commandMock.reset();
-    }
+    {}
 };
 
 TEST_F(TestCommand, testTtsByCtorShellCmdCalledTwice)
