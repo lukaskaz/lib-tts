@@ -72,9 +72,10 @@ jobs:
     - name: Setting up
       run: |
         sudo apt install libboost-filesystem-dev lcov
+        cd tests && git clone https://github.com/lukaskaz/coverage-checker.git
     - name: Preparing tests
       run: |
         cd tests && mkdir build && cd build && cmake .. && make
     - name: Running coverage checker
       run: |
-        cd tests && ./build/check-coverage.sh
+        cd tests/coverage-checker && ./run.sh ../build

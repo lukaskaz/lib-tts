@@ -44,20 +44,3 @@ EXTERNALPROJECT_ADD(
 
 include_directories(${source_dir}/inc)
 # link_directories(${build_dir}/build)
-
-set(source_dir "${CMAKE_CURRENT_BINARY_DIR}/coveragechecker-src")
-
-EXTERNALPROJECT_ADD(
-  coveragechecker
-  GIT_REPOSITORY    https://github.com/lukaskaz/coverage-checker.git
-  GIT_TAG           main
-  PATCH_COMMAND     ""
-  PREFIX            coveragechecker-workspace
-  SOURCE_DIR        ${source_dir}
-  BINARY_DIR        ""
-  CONFIGURE_COMMAND ""
-  BUILD_COMMAND     ""
-  UPDATE_COMMAND    ""
-  INSTALL_COMMAND   cd ${source_dir} && ./install.sh ${CMAKE_CURRENT_BINARY_DIR}
-  TEST_COMMAND      ""
-)
