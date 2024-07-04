@@ -8,10 +8,11 @@ int main()
 {
     try
     {
-        auto shellCommand = std::make_shared<BashCommand>();
-        auto tts = std::make_unique<tts::TextToVoice>(shellCommand,
-                                                      tts::language::polish);
+        auto tts = tts::TextToVoiceFactory::create(tts::language::polish);
         tts->speak("Jestem twoim asystentem, co mam zrobić?");
+
+        tts::TextToVoiceFactory::create("Hi, this is second speech!",
+                                        tts::language::english);
     }
     catch (std::exception& err)
     {

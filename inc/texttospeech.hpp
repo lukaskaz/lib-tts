@@ -35,4 +35,17 @@ class TextToVoice
     void run();
 };
 
+class TextToVoiceFactory
+{
+  public:
+    TextToVoiceFactory() = delete;
+    TextToVoiceFactory(const TextToVoiceFactory&) = delete;
+    TextToVoiceFactory(TextToVoiceFactory&&) = delete;
+    TextToVoiceFactory& operator=(const TextToVoiceFactory&) = delete;
+    TextToVoiceFactory& operator=(TextToVoiceFactory&&) = delete;
+
+    static std::shared_ptr<TextToVoice> create(language);
+    static std::shared_ptr<TextToVoice> create(const std::string&, language);
+};
+
 } // namespace tts

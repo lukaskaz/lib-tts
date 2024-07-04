@@ -60,4 +60,17 @@ void TextToVoice::speak(const std::string& speak)
     run();
 }
 
+std::shared_ptr<TextToVoice> TextToVoiceFactory::create(language lang)
+{
+    auto shell = std::make_shared<BashCommand>();
+    return std::make_shared<TextToVoice>(shell, lang);
+}
+
+std::shared_ptr<TextToVoice> TextToVoiceFactory::create(const std::string& text,
+                                                        language lang)
+{
+    auto shell = std::make_shared<BashCommand>();
+    return std::make_shared<TextToVoice>(shell, text, lang);
+}
+
 } // namespace tts
