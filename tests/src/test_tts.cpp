@@ -3,7 +3,7 @@
 
 using namespace testing;
 
-class TestCommand : public Test
+class TestTts : public Test
 {
   public:
     std::shared_ptr<NiceMock<CommandsMock>> commandMock =
@@ -17,17 +17,32 @@ class TestCommand : public Test
     {}
 };
 
-TEST_F(TestCommand, testTtsByCtorShellCmdCalledTwice)
+TEST_F(TestTts, testTtsByCtorShellCmdCalledTwice)
 {
     EXPECT_CALL(*commandMock, run(_)).Times(2);
     auto tts = std::make_unique<tts::TextToVoice>(
         commandMock, "Test meesage one", tts::language::english);
 }
 
-TEST_F(TestCommand, testTtsBySpeakShellCmdCalledTwice)
+TEST_F(TestTts, testTtsBySpeakShellCmdCalledTwice)
 {
     EXPECT_CALL(*commandMock, run(_)).Times(2);
     auto tts =
         std::make_unique<tts::TextToVoice>(commandMock, tts::language::english);
+    tts->speak("Test message two");
+}
+
+TEST_F(TestTts, testTtsFactoryByCtorShellCmdCalledTwice)
+{
+    EXPECT_CALL(*commandMock, run(_)).Times(2);
+    auto tts = tts::TextToVoiceFactory::create(commandMock, "Test meesage one",
+                                               tts::language::english);
+}
+
+TEST_F(TestTts, testTtsFactoryBySpeakShellCmdCalledTwice)
+{
+    EXPECT_CALL(*commandMock, run(_)).Times(2);
+    auto tts =
+        tts::TextToVoiceFactory::create(commandMock, tts::language::english);
     tts->speak("Test message two");
 }

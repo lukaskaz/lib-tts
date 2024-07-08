@@ -14,14 +14,21 @@ enum class language
     polish
 };
 
-class TextToVoice
+class TextToVoiceIf
+{
+  public:
+    virtual ~TextToVoiceIf(){};
+    virtual void speak(const std::string&) = 0;
+};
+
+class TextToVoice : public TextToVoiceIf
 {
   public:
     TextToVoice(std::shared_ptr<ShellCommand>, language);
     TextToVoice(std::shared_ptr<ShellCommand>, const std::string&, language);
     ~TextToVoice();
 
-    void speak(const std::string&);
+    void speak(const std::string&) override;
 
   private:
     std::shared_ptr<ShellCommand> commandHandler;
@@ -44,8 +51,12 @@ class TextToVoiceFactory
     TextToVoiceFactory& operator=(const TextToVoiceFactory&) = delete;
     TextToVoiceFactory& operator=(TextToVoiceFactory&&) = delete;
 
-    static std::shared_ptr<TextToVoice> create(language);
-    static std::shared_ptr<TextToVoice> create(const std::string&, language);
+    static std::shared_ptr<TextToVoiceIf> create(language);
+    static std::shared_ptr<TextToVoiceIf> create(std::shared_ptr<ShellCommand>,
+                                                 language);
+    static std::shared_ptr<TextToVoiceIf> create(const std::string&, language);
+    static std::shared_ptr<TextToVoiceIf> create(std::shared_ptr<ShellCommand>,
+                                                 const std::string&, language);
 };
 
 } // namespace tts

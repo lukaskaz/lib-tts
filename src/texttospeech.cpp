@@ -60,16 +60,30 @@ void TextToVoice::speak(const std::string& speak)
     run();
 }
 
-std::shared_ptr<TextToVoice> TextToVoiceFactory::create(language lang)
+std::shared_ptr<TextToVoiceIf> TextToVoiceFactory::create(language lang)
 {
     auto shell = std::make_shared<BashCommand>();
+    return create(shell, lang);
+}
+
+std::shared_ptr<TextToVoiceIf>
+    TextToVoiceFactory::create(std::shared_ptr<ShellCommand> shell,
+                               language lang)
+{
     return std::make_shared<TextToVoice>(shell, lang);
 }
 
-std::shared_ptr<TextToVoice> TextToVoiceFactory::create(const std::string& text,
-                                                        language lang)
+std::shared_ptr<TextToVoiceIf>
+    TextToVoiceFactory::create(const std::string& text, language lang)
 {
     auto shell = std::make_shared<BashCommand>();
+    return create(shell, text, lang);
+}
+
+std::shared_ptr<TextToVoiceIf>
+    TextToVoiceFactory::create(std::shared_ptr<ShellCommand> shell,
+                               const std::string& text, language lang)
+{
     return std::make_shared<TextToVoice>(shell, text, lang);
 }
 
