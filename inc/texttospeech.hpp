@@ -19,6 +19,7 @@ class TextToVoiceIf
   public:
     virtual ~TextToVoiceIf(){};
     virtual void speak(const std::string&) = 0;
+    virtual void speak(const std::string&, language) = 0;
 };
 
 class TextToVoice : public TextToVoiceIf
@@ -30,17 +31,17 @@ class TextToVoice : public TextToVoiceIf
     ~TextToVoice();
 
     void speak(const std::string&) override;
+    void speak(const std::string&, language) override;
 
   private:
     std::shared_ptr<shell::ShellCommand> commandHandler;
-    std::string text;
-    const std::string languageId;
+    std::string languageId;
     std::string audioFilePath;
     std::string playVoiceCmd;
-    std::string getVoiceFromTextCmd;
+    std::string voiceFromTextUrl;
 
     void init();
-    void run();
+    void run(const std::string&);
 };
 
 class TextToVoiceFactory
