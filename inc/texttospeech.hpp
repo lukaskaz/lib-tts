@@ -24,14 +24,15 @@ class TextToVoiceIf
 class TextToVoice : public TextToVoiceIf
 {
   public:
-    TextToVoice(std::shared_ptr<ShellCommand>, language);
-    TextToVoice(std::shared_ptr<ShellCommand>, const std::string&, language);
+    TextToVoice(std::shared_ptr<shell::ShellCommand>, language);
+    TextToVoice(std::shared_ptr<shell::ShellCommand>, const std::string&,
+                language);
     ~TextToVoice();
 
     void speak(const std::string&) override;
 
   private:
-    std::shared_ptr<ShellCommand> commandHandler;
+    std::shared_ptr<shell::ShellCommand> commandHandler;
     std::string text;
     const std::string languageId;
     std::string audioFilePath;
@@ -52,11 +53,12 @@ class TextToVoiceFactory
     TextToVoiceFactory& operator=(TextToVoiceFactory&&) = delete;
 
     static std::shared_ptr<TextToVoiceIf> create(language);
-    static std::shared_ptr<TextToVoiceIf> create(std::shared_ptr<ShellCommand>,
-                                                 language);
+    static std::shared_ptr<TextToVoiceIf>
+        create(std::shared_ptr<shell::ShellCommand>, language);
     static std::shared_ptr<TextToVoiceIf> create(const std::string&, language);
-    static std::shared_ptr<TextToVoiceIf> create(std::shared_ptr<ShellCommand>,
-                                                 const std::string&, language);
+    static std::shared_ptr<TextToVoiceIf>
+        create(std::shared_ptr<shell::ShellCommand>, const std::string&,
+               language);
 };
 
 } // namespace tts

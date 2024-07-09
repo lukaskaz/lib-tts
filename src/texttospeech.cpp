@@ -16,13 +16,13 @@ static const std::unordered_map<language, std::string> langMap = {
     {language::german, "de"},
     {language::polish, "pl"}};
 
-TextToVoice::TextToVoice(std::shared_ptr<ShellCommand> commandHandler,
+TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> commandHandler,
                          language langOfText) :
     commandHandler{commandHandler},
     languageId{langMap.at(langOfText)}
 {}
 
-TextToVoice::TextToVoice(std::shared_ptr<ShellCommand> commandHandler,
+TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> commandHandler,
                          const std::string& text, language langOfText) :
     commandHandler{commandHandler},
     text{text}, languageId{langMap.at(langOfText)}
@@ -62,12 +62,12 @@ void TextToVoice::speak(const std::string& speak)
 
 std::shared_ptr<TextToVoiceIf> TextToVoiceFactory::create(language lang)
 {
-    auto shell = std::make_shared<BashCommand>();
+    auto shell = std::make_shared<shell::BashCommand>();
     return create(shell, lang);
 }
 
 std::shared_ptr<TextToVoiceIf>
-    TextToVoiceFactory::create(std::shared_ptr<ShellCommand> shell,
+    TextToVoiceFactory::create(std::shared_ptr<shell::ShellCommand> shell,
                                language lang)
 {
     return std::make_shared<TextToVoice>(shell, lang);
@@ -76,12 +76,12 @@ std::shared_ptr<TextToVoiceIf>
 std::shared_ptr<TextToVoiceIf>
     TextToVoiceFactory::create(const std::string& text, language lang)
 {
-    auto shell = std::make_shared<BashCommand>();
+    auto shell = std::make_shared<shell::BashCommand>();
     return create(shell, text, lang);
 }
 
 std::shared_ptr<TextToVoiceIf>
-    TextToVoiceFactory::create(std::shared_ptr<ShellCommand> shell,
+    TextToVoiceFactory::create(std::shared_ptr<shell::ShellCommand> shell,
                                const std::string& text, language lang)
 {
     return std::make_shared<TextToVoice>(shell, text, lang);
