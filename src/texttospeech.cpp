@@ -1,7 +1,11 @@
 #include "texttospeech.hpp"
 
+#include <curl/curl.h>
+#include <curl/easy.h>
+
 #include <boost/filesystem.hpp>
 
+#include <algorithm>
 #include <unordered_map>
 
 namespace tts
@@ -16,6 +20,8 @@ static const std::unordered_map<language, std::string> langMap = {
     {language::german, "de"},
     {language::polish, "pl"}};
 
+bool downloadSpeechFile(std::string&, const std::string&, const std::string&);
+
 TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> commandHandler,
                          language langOfText) :
     commandHandler{commandHandler},
@@ -25,10 +31,10 @@ TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> commandHandler,
 TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> commandHandler,
                          const std::string& text, language langOfText) :
     commandHandler{commandHandler},
-    text{text}, languageId{langMap.at(langOfText)}
+    languageId{langMap.at(langOfText)}
 {
     init();
-    run();
+    run(text);
 }
 
 TextToVoice::~TextToVoice()
@@ -41,23 +47,28 @@ inline void TextToVoice::init()
     boost::filesystem::create_directory(tts::audioDirectory);
     audioFilePath =
         std::string{tts::audioDirectory} + std::string{tts::playbackName};
-    getVoiceFromTextCmd = "wget -q -U Mozilla -O " + audioFilePath + " \"" +
-                          tts::convUri + "&tl=" + languageId + "&q=" + text +
-                          "\"";
-    playVoiceCmd = "play --no-show-progress " + audioFilePath + " --type alsa";
+    voiceFromTextUrl = std::string(tts::convUri) + "&tl=" + languageId + "&q=";
+    playVoiceCmd = "play --no-show-progress " + audioFilePath + " --type alsa ";
 }
 
-inline void TextToVoice::run()
+inline void TextToVoice::run(const std::string& text)
 {
-    commandHandler->run(std::move(getVoiceFromTextCmd));
+    downloadSpeechFile(voiceFromTextUrl, text, audioFilePath);
     commandHandler->run(std::move(playVoiceCmd));
 }
 
-void TextToVoice::speak(const std::string& speak)
+void TextToVoice::speak(const std::string& text)
 {
-    text = speak;
     init();
-    run();
+    run(text);
+}
+
+void TextToVoice::speak(const std::string& texttospeak, language langOfText)
+{
+    std::string prevLanguageId{languageId};
+    languageId = langMap.at(langOfText);
+    speak(texttospeak);
+    languageId = prevLanguageId;
 }
 
 std::shared_ptr<TextToVoiceIf> TextToVoiceFactory::create(language lang)
@@ -85,6 +96,27 @@ std::shared_ptr<TextToVoiceIf>
                                const std::string& text, language lang)
 {
     return std::make_shared<TextToVoice>(shell, text, lang);
+}
+
+bool downloadSpeechFile(std::string& url, const std::string& text,
+                        const std::string& filepath)
+{
+    CURLcode res{};
+    if (auto curl = curl_easy_init(); curl != nullptr)
+    {
+        auto fp = fopen(filepath.c_str(), "wb");
+        auto escapedtext =
+            curl_easy_escape(curl, text.c_str(), (int)text.length());
+        url.append(escapedtext);
+        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+        curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
+        res = curl_easy_perform(curl); // synchronous file download
+        curl_free(escapedtext);
+        curl_easy_cleanup(curl);
+        fclose(fp);
+    }
+    return res == CURLE_OK;
 }
 
 } // namespace tts
