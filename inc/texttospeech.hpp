@@ -1,5 +1,6 @@
 #pragma once
 
+#include "helpers.hpp"
 #include "shellcommand.hpp"
 
 #include <memory>
@@ -25,8 +26,10 @@ class TextToVoiceIf
 class TextToVoice : public TextToVoiceIf
 {
   public:
-    TextToVoice(std::shared_ptr<shell::ShellCommand>, language);
-    TextToVoice(std::shared_ptr<shell::ShellCommand>, const std::string&,
+    TextToVoice(std::shared_ptr<shell::ShellCommand>,
+                std::shared_ptr<helpers::HelpersIf>, language);
+    TextToVoice(std::shared_ptr<shell::ShellCommand>,
+                std::shared_ptr<helpers::HelpersIf>, const std::string&,
                 language);
     ~TextToVoice();
 
@@ -35,6 +38,7 @@ class TextToVoice : public TextToVoiceIf
 
   private:
     std::shared_ptr<shell::ShellCommand> commandHandler;
+    std::shared_ptr<helpers::HelpersIf> helpers;
     std::string languageId;
     std::string audioFilePath;
     std::string playVoiceCmd;
