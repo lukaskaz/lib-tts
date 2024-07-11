@@ -3,7 +3,7 @@
 #include <memory>
 #include <string>
 
-namespace helpers
+namespace ttshelpers
 {
 
 class HelpersIf
@@ -35,4 +35,4 @@ class HelpersFactory
     static std::shared_ptr<HelpersIf> create();
 };
 
-} // namespace helpers
+} // namespace ttshelpers

@@ -21,14 +21,14 @@ static const std::unordered_map<language, std::string> langMap = {
     {language::polish, "pl"}};
 
 TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> commandHandler,
-                         std::shared_ptr<helpers::HelpersIf> helpers,
+                         std::shared_ptr<ttshelpers::HelpersIf> helpers,
                          language langOfText) :
     commandHandler{commandHandler},
     helpers{helpers}, languageId{langMap.at(langOfText)}
 {}
 
 TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> commandHandler,
-                         std::shared_ptr<helpers::HelpersIf> helpers,
+                         std::shared_ptr<ttshelpers::HelpersIf> helpers,
                          const std::string& text, language langOfText) :
     commandHandler{commandHandler},
     helpers{helpers}, languageId{langMap.at(langOfText)}
@@ -81,7 +81,7 @@ std::shared_ptr<TextToVoiceIf>
     TextToVoiceFactory::create(std::shared_ptr<shell::ShellCommand> shell,
                                language lang)
 {
-    auto helpers = helpers::HelpersFactory::create();
+    auto helpers = ttshelpers::HelpersFactory::create();
     return std::make_shared<TextToVoice>(shell, helpers, lang);
 }
 
@@ -96,7 +96,7 @@ std::shared_ptr<TextToVoiceIf>
     TextToVoiceFactory::create(std::shared_ptr<shell::ShellCommand> shell,
                                const std::string& text, language lang)
 {
-    auto helpers = helpers::HelpersFactory::create();
+    auto helpers = ttshelpers::HelpersFactory::create();
     return std::make_shared<TextToVoice>(shell, helpers, text, lang);
 }
 

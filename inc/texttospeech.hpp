@@ -27,9 +27,9 @@ class TextToVoice : public TextToVoiceIf
 {
   public:
     TextToVoice(std::shared_ptr<shell::ShellCommand>,
-                std::shared_ptr<helpers::HelpersIf>, language);
+                std::shared_ptr<ttshelpers::HelpersIf>, language);
     TextToVoice(std::shared_ptr<shell::ShellCommand>,
-                std::shared_ptr<helpers::HelpersIf>, const std::string&,
+                std::shared_ptr<ttshelpers::HelpersIf>, const std::string&,
                 language);
     ~TextToVoice();
 
@@ -38,7 +38,7 @@ class TextToVoice : public TextToVoiceIf
 
   private:
     std::shared_ptr<shell::ShellCommand> commandHandler;
-    std::shared_ptr<helpers::HelpersIf> helpers;
+    std::shared_ptr<ttshelpers::HelpersIf> helpers;
     std::string languageId;
     std::string audioFilePath;
     std::string playVoiceCmd;
