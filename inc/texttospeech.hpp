@@ -23,6 +23,9 @@ class TextToVoiceIf
     virtual void speak(const std::string&, language) = 0;
 };
 
+namespace simple
+{
+
 class TextToVoice : public TextToVoiceIf
 {
   public:
@@ -48,6 +51,39 @@ class TextToVoice : public TextToVoiceIf
     void run(const std::string&);
 };
 
+} // namespace simple
+
+namespace extended
+{
+class TextToVoice : public TextToVoiceIf
+{
+  public:
+    TextToVoice(std::shared_ptr<shell::ShellCommand>,
+                std::shared_ptr<ttshelpers::HelpersIf>, language);
+    TextToVoice(std::shared_ptr<shell::ShellCommand>,
+                std::shared_ptr<ttshelpers::HelpersIf>, const std::string&,
+                language);
+    ~TextToVoice();
+
+    void speak(const std::string&) override;
+    void speak(const std::string&, language) override;
+
+  private:
+    std::shared_ptr<shell::ShellCommand> commandHandler;
+    std::shared_ptr<ttshelpers::HelpersIf> helpers;
+    std::tuple<std::string, std::string, std::string> languageId;
+    std::string audioFilePath;
+    std::string playVoiceCmd;
+    std::string voiceFromTextUrl;
+    std::string usageKey;
+
+    void init();
+    std::string decode(const std::string&);
+    void saveaudio(std::string&&);
+    void run(const std::string&);
+};
+} // namespace extended
+
 class TextToVoiceFactory
 {
   public:
@@ -60,9 +96,16 @@ class TextToVoiceFactory
     static std::shared_ptr<TextToVoiceIf> create(language);
     static std::shared_ptr<TextToVoiceIf>
         create(std::shared_ptr<shell::ShellCommand>, language);
+    static std::shared_ptr<TextToVoiceIf>
+        create(std::shared_ptr<shell::ShellCommand>,
+               std::shared_ptr<ttshelpers::HelpersIf>, language);
     static std::shared_ptr<TextToVoiceIf> create(const std::string&, language);
     static std::shared_ptr<TextToVoiceIf>
         create(std::shared_ptr<shell::ShellCommand>, const std::string&,
+               language);
+    static std::shared_ptr<TextToVoiceIf>
+        create(std::shared_ptr<shell::ShellCommand>,
+               std::shared_ptr<ttshelpers::HelpersIf>, const std::string&,
                language);
 };
 

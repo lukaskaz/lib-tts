@@ -10,4 +10,7 @@ class HelpersMock : public ttshelpers::HelpersIf
     MOCK_METHOD(bool, downloadFile,
                 (std::string&, const std::string&, const std::string&),
                 (override));
+    MOCK_METHOD(bool, uploadData,
+                (const std::string&, const std::string&, std::string&),
+                (override));
 };

@@ -20,34 +20,61 @@ class TestTts : public Test
     {}
 };
 
-TEST_F(TestTts, testTtsByCtorShellCmdCalledTwice)
+TEST_F(TestTts, testSimpleTtsByCtorShellCmdCalledTwice)
 {
     EXPECT_CALL(*shellMock, run(_)).Times(1);
     EXPECT_CALL(*helpersMock, downloadFile(_, _, _)).Times(1);
-    auto tts = std::make_unique<tts::TextToVoice>(
+    auto tts = std::make_unique<tts::simple::TextToVoice>(
         shellMock, helpersMock, "Test message one", tts::language::english);
 }
 
-TEST_F(TestTts, testTtsBySpeakShellCmdCalledTwice)
+TEST_F(TestTts, testSimpleTtsBySpeakShellCmdCalledTwice)
 {
     EXPECT_CALL(*shellMock, run(_)).Times(1);
     EXPECT_CALL(*helpersMock, downloadFile(_, _, _)).Times(1);
-    auto tts = std::make_unique<tts::TextToVoice>(shellMock, helpersMock,
-                                                  tts::language::english);
+    auto tts = std::make_unique<tts::simple::TextToVoice>(
+        shellMock, helpersMock, tts::language::english);
+    tts->speak("Test message two");
+}
+
+TEST_F(TestTts, testExtendedTtsByCtorShellCmdCalledTwice)
+{
+    EXPECT_CALL(*shellMock, run(_)).Times(1);
+    std::string resultjson = {"{\"audioContent\":\"BASE64ENCODEDAUDIO\"}"};
+    EXPECT_CALL(*helpersMock, uploadData(_, _, _))
+        .WillOnce((DoAll(SetArgReferee<2>(resultjson), Return(true))));
+    auto tts = std::make_unique<tts::extended::TextToVoice>(
+        shellMock, helpersMock, "Test message one", tts::language::english);
+}
+
+TEST_F(TestTts, testExtendedTtsBySpeakShellCmdCalledTwice)
+{
+    EXPECT_CALL(*shellMock, run(_)).Times(1);
+    std::string resultjson = {"{\"audioContent\":\"BASE64ENCODEDAUDIO\"}"};
+    EXPECT_CALL(*helpersMock, uploadData(_, _, _))
+        .WillOnce(DoAll(SetArgReferee<2>(resultjson), Return(true)));
+    auto tts = std::make_unique<tts::extended::TextToVoice>(
+        shellMock, helpersMock, tts::language::english);
     tts->speak("Test message two");
 }
 
 TEST_F(TestTts, testTtsFactoryByCtorShellCmdCalledTwice)
 {
     EXPECT_CALL(*shellMock, run(_)).Times(1);
-    auto tts = tts::TextToVoiceFactory::create(shellMock, "Test message one",
-                                               tts::language::english);
+    std::string resultjson = {"{\"audioContent\":\"BASE64ENCODEDAUDIO\"}"};
+    EXPECT_CALL(*helpersMock, uploadData(_, _, _))
+        .WillOnce(DoAll(SetArgReferee<2>(resultjson), Return(true)));
+    auto tts = tts::TextToVoiceFactory::create(
+        shellMock, helpersMock, "Test message one", tts::language::english);
 }
 
 TEST_F(TestTts, testTtsFactoryBySpeakShellCmdCalledTwice)
 {
     EXPECT_CALL(*shellMock, run(_)).Times(1);
-    auto tts =
-        tts::TextToVoiceFactory::create(shellMock, tts::language::english);
+    std::string resultjson = {"{\"audioContent\":\"BASE64ENCODEDAUDIO\"}"};
+    EXPECT_CALL(*helpersMock, uploadData(_, _, _))
+        .WillOnce(DoAll(SetArgReferee<2>(resultjson), Return(true)));
+    auto tts = tts::TextToVoiceFactory::create(shellMock, helpersMock,
+                                               tts::language::english);
     tts->speak("Test message two");
 }
