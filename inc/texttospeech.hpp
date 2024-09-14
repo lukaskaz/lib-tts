@@ -96,9 +96,16 @@ class TextToVoiceFactory
     static std::shared_ptr<TextToVoiceIf> create(language);
     static std::shared_ptr<TextToVoiceIf>
         create(std::shared_ptr<shell::ShellCommand>, language);
+    static std::shared_ptr<TextToVoiceIf>
+        create(std::shared_ptr<shell::ShellCommand>,
+               std::shared_ptr<ttshelpers::HelpersIf>, language);
     static std::shared_ptr<TextToVoiceIf> create(const std::string&, language);
     static std::shared_ptr<TextToVoiceIf>
         create(std::shared_ptr<shell::ShellCommand>, const std::string&,
+               language);
+    static std::shared_ptr<TextToVoiceIf>
+        create(std::shared_ptr<shell::ShellCommand>,
+               std::shared_ptr<ttshelpers::HelpersIf>, const std::string&,
                language);
 };
 

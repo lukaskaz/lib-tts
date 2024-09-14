@@ -114,7 +114,7 @@ inline void TextToVoice::init()
     std::ifstream configFile(configFilePath);
     if (!configFile.is_open())
     {
-        throw std::runtime_error("Cannot open config file for STT");
+        throw std::runtime_error("Cannot open config file for TTS");
     }
 
     std::string fileData;
@@ -191,6 +191,14 @@ std::shared_ptr<TextToVoiceIf>
                                language lang)
 {
     auto helpers = ttshelpers::HelpersFactory::create();
+    return create(shell, helpers, lang);
+}
+
+std::shared_ptr<TextToVoiceIf>
+    TextToVoiceFactory::create(std::shared_ptr<shell::ShellCommand> shell,
+                               std::shared_ptr<ttshelpers::HelpersIf> helpers,
+                               language lang)
+{
     return std::make_shared<extended::TextToVoice>(shell, helpers, lang);
 }
 
@@ -206,6 +214,14 @@ std::shared_ptr<TextToVoiceIf>
                                const std::string& text, language lang)
 {
     auto helpers = ttshelpers::HelpersFactory::create();
+    return create(shell, helpers, text, lang);
+}
+
+std::shared_ptr<TextToVoiceIf>
+    TextToVoiceFactory::create(std::shared_ptr<shell::ShellCommand> shell,
+                               std::shared_ptr<ttshelpers::HelpersIf> helpers,
+                               const std::string& text, language lang)
+{
     return std::make_shared<extended::TextToVoice>(shell, helpers, text, lang);
 }
 
