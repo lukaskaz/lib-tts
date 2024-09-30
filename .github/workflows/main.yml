@@ -39,10 +39,13 @@ jobs:
          libboost-filesystem-dev libcurl4-openssl-dev 
     - name: Preparing binary
       run: |
-        mkdir build && cd build && cmake .. -DADD_BASIC=ON && make
-    - name: Executing program
+        mkdir build && cd build && cmake .. -DADD_EXAMPLES=ON && make
+    - name: Executing googlebasic program
       run: |
-        ./build/examples/basic/prog
+        ./build/examples/googlebasic/googlebasic
+    - name: Executing googleapi program
+      run: |
+        ./build/examples/googleapi/googleapi
 
   test:
     name: Test

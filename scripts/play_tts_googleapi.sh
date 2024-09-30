@@ -34,7 +34,9 @@ fi
 #'audioConfig':{'audioEncoding':'MP3'}
 #}" "${TTSURL}${KEY}" | jq --raw-output '.audioContent' | base64 --decode > $TTSFILE
 
-wget -q --header 'Content-Type:application/json' --post-data="{'input':{'text':'$TTSTEXT'},'voice':{'languageCode':'pl-PL','name':'pl-PL-Standard-A','ssmlGender':'FEMALE'},'audioConfig':{'audioEncoding':'MP3'}}" -O- "${TTSURL}${KEY}" | jq --raw-output '.audioContent' | base64 --decode > $TTSFILE 
+#wget -q --header 'Content-Type:application/json' --post-data="{'input':{'text':'$TTSTEXT'},'voice':{'languageCode':'pl-PL','name':'pl-PL-Standard-A','ssmlGender':'FEMALE'},'audioConfig':{'audioEncoding':'MP3'}}" -O- "${TTSURL}${KEY}" > test.file
+
+wget -q --header 'Content-Type:application/json' --post-data="{'input':{'text':'$TTSTEXT'},'voice':{'languageCode':'pl-PL','name':'pl-PL-Standard-E','ssmlGender':'FEMALE'},'audioConfig':{'audioEncoding':'MP3'}}" -O- "${TTSURL}${KEY}" | jq --raw-output '.audioContent' | base64 --decode > $TTSFILE 
 if [ $? -eq 0 ]; then
 	play $TTSFILE &> /dev/null
 	if [ $? -eq 0 ]; then
