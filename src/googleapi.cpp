@@ -114,16 +114,10 @@ inline void TextToVoice::saveaudio(std::string&& audio)
 
 inline void TextToVoice::setvoice(const voice_t& voice)
 {
-    if (voiceMap.contains(voice))
-    {
-        voiceId = voiceMap.at(voice);
-    }
-    else
-    {
-        voice_t defaultvoice = {std::get<language>(voice),
-                                std::get<gender>(voice), 1};
-        voiceId = voiceMap.at(defaultvoice);
-    }
+    voice_t defaultvoice = {std::get<language>(voice), std::get<gender>(voice),
+                            1};
+    voiceId = voiceMap.contains(voice) ? voiceMap.at(voice)
+                                       : voiceMap.at(defaultvoice);
 }
 
 void TextToVoice::speak(const std::string& text)
