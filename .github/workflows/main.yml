@@ -16,13 +16,18 @@ jobs:
     steps:
     - name: Checking out
       uses: actions/checkout@v4
-    - name: Setting up
+    - name: Setting up dependencies
       run: |
         sudo apt install sox libsox-fmt-mp3 \
          libboost-filesystem-dev libcurl4-openssl-dev 
+    - name: Setting up google-cloud-cpp
+      run: |
+        vcpkg install google-cloud-cpp[core,texttospeech]
     - name: Building target app
       run: |
-        mkdir build && cd build && cmake .. && make
+        mkdir build && cd build &&
+        cmake -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake .. &&
+        make -j $(nproc)
       
   execution:
     name: Execution
@@ -31,21 +36,29 @@ jobs:
     environment: production
 
     steps:
-    - name: Checking out
+    - name: Checking out 
       uses: actions/checkout@v4
-    - name: Setting up
+    - name: Setting up dependencies
       run: |
         sudo apt install sox libsox-fmt-mp3 \
          libboost-filesystem-dev libcurl4-openssl-dev 
+    - name: Setting up google-cloud-cpp
+      run: |
+        vcpkg install google-cloud-cpp[core,texttospeech]
     - name: Preparing binary
       run: |
-        mkdir build && cd build && cmake .. -DADD_EXAMPLES=ON && make
+        mkdir build && cd build &&
+        cmake -DADD_EXAMPLES=ON -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake .. &&
+        make -j $(nproc)
     - name: Executing googlebasic program
       run: |
         ./build/examples/googlebasic/googlebasic
     - name: Executing googleapi program
       run: |
         ./build/examples/googleapi/googleapi
+    - name: Executing googlecloud program
+      run: |
+        ./build/examples/googlecloud/googlecloud 
 
   test:
     name: Test
@@ -55,13 +68,18 @@ jobs:
     steps:
     - name: Checking out
       uses: actions/checkout@v4
-    - name: Setting up
+    - name: Setting up dependencies
       run: |
         sudo apt install sox libsox-fmt-mp3 \
          libboost-filesystem-dev libcurl4-openssl-dev 
+    - name: Setting up google-cloud-cpp
+      run: |
+        vcpkg install google-cloud-cpp[core,texttospeech]
     - name: Building tests
       run: |
-        cd tests && mkdir build && cd build && cmake .. && make
+        cd tests && mkdir build && cd build && 
+        cmake -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake .. &&
+        make -j $(nproc)
     - name: Running tests
       run: |
         ctest --output-on-failure --test-dir tests/build/
@@ -75,14 +93,19 @@ jobs:
     steps:
     - name: Checking out
       uses: actions/checkout@v4
-    - name: Setting up
+    - name: Setting up dependencies
       run: |
         sudo apt install sox libsox-fmt-mp3 \
          libboost-filesystem-dev libcurl4-openssl-dev lcov
         cd tests && git clone https://github.com/lukaskaz/coverage-checker.git
+    - name: Setting up google-cloud-cpp
+      run: |
+        vcpkg install google-cloud-cpp[core,texttospeech]
     - name: Preparing tests
       run: |
-        cd tests && mkdir build && cd build && cmake .. && make
+        cd tests && mkdir build && cd build &&
+        cmake -DCMAKE_TOOLCHAIN_FILE=${VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake .. &&
+        make -j $(nproc)
     - name: Running coverage checker
       run: |
         cd tests/coverage-checker && ./run.sh ../build

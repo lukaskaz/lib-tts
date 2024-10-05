@@ -5,7 +5,7 @@
 namespace tts
 {
 
-namespace googleapi
+namespace googlecloud
 {
 
 class TextToVoice : public TextToVoiceIf
@@ -24,6 +24,6 @@ class TextToVoice : public TextToVoiceIf
     std::unique_ptr<Handler> handler;
 };
 
-} // namespace googleapi
+} // namespace googlecloud
 
 } // namespace tts
