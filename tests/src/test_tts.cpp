@@ -2,6 +2,9 @@
 #include "mocks/mock_shell.hpp"
 #include "tts/interfaces/googleapi.hpp"
 #include "tts/interfaces/googlebasic.hpp"
+#include "tts/interfaces/googlecloud.hpp"
+
+#include <nlohmann/json.hpp>
 
 using namespace testing;
 
@@ -81,6 +84,29 @@ TEST_F(TestTts, googleApiCreatedAndUsed_voiceIsChangedAndRestored)
 
     EXPECT_NE(configfirst, configsecond);
     EXPECT_EQ(configfirst, configthird);
+}
+
+TEST_F(TestTts, googleCloudCreatedAndUsed_speakThrows)
+{
+    using namespace tts;
+    const std::string testmessage = "Test message googlecloud!";
+    const voice_t voice{language::english, gender::male, 1};
+    EXPECT_THROW(tts::TextToVoiceFactory<tts::googlecloud::TextToVoice>::create(
+                     shellMock, helpersMock, voice)
+                     ->speak(testmessage),
+                 std::runtime_error);
+}
+
+TEST_F(TestTts, googleCloudCreatedAndUsed_speakWithChangedVoiceThrows)
+{
+    using namespace tts;
+    const std::string testmessage = "Test message googlecloud!";
+    const voice_t initialvoice{language::english, gender::male, 1},
+        changedvoice = {language::polish, gender::male, 1};
+    EXPECT_THROW(tts::TextToVoiceFactory<tts::googlecloud::TextToVoice>::create(
+                     shellMock, helpersMock, initialvoice)
+                     ->speak(testmessage, changedvoice),
+                 std::runtime_error);
 }
 
 class TestTtsParams : public TestWithParam<tts::voice_t>

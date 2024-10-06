@@ -72,9 +72,4 @@ bool Helpers::uploadData(const std::string& url, const std::string& datastr,
     return res == CURLE_OK;
 }
 
-std::shared_ptr<HelpersIf> HelpersFactory::create()
-{
-    return std::make_shared<Helpers>();
-}
-
 } // namespace ttshelpers

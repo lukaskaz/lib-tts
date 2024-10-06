@@ -20,16 +20,8 @@ class TextToVoice : public TextToVoiceIf
     TextToVoice(std::shared_ptr<shell::ShellCommand>,
                 std::shared_ptr<ttshelpers::HelpersIf>, const voice_t&);
 
-    std::shared_ptr<shell::ShellCommand> commandHandler;
-    std::shared_ptr<ttshelpers::HelpersIf> helpers;
-    std::string voiceId;
-    std::string audioFilePath;
-    std::string playVoiceCmd;
-    std::string voiceFromTextUrl;
-
-    void init();
-    void run(const std::string&);
-    void setvoice(const voice_t&);
+    struct Handler;
+    std::unique_ptr<Handler> handler;
 };
 
 } // namespace googlebasic

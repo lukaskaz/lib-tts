@@ -24,19 +24,19 @@ class Helpers : public HelpersIf
                     std::string&) override;
     bool downloadFile(std::string&, const std::string&,
                       const std::string&) override;
+
+  private:
+    friend class HelpersFactory;
+    Helpers() = default;
 };
 
 class HelpersFactory
 {
   public:
-  public:
-    HelpersFactory() = delete;
-    HelpersFactory(const HelpersFactory&) = delete;
-    HelpersFactory(HelpersFactory&&) = delete;
-    HelpersFactory& operator=(const HelpersFactory&) = delete;
-    HelpersFactory& operator=(HelpersFactory&&) = delete;
-
-    static std::shared_ptr<HelpersIf> create();
+    static std::shared_ptr<HelpersIf> create()
+    {
+        return std::shared_ptr<Helpers>(new Helpers());
+    }
 };
 
 } // namespace ttshelpers
