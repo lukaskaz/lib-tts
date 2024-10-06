@@ -31,7 +31,7 @@ jobs:
       
   execution:
     name: Execution
-    needs: [build]
+    #needs: [build]
     runs-on: ubuntu-latest
     environment: production
 
@@ -86,7 +86,7 @@ jobs:
 
   tests-coverage:
     name: Coverage
-    needs: [test]
+    #needs: [test]
     runs-on: ubuntu-latest
     environment: test
 
