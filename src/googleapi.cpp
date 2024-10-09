@@ -107,14 +107,14 @@ struct TextToVoice::Handler
                 }
                 auto content = std::string(
                     std::istreambuf_iterator<char>(ifs.rdbuf()), {});
-                json sttConfig = json::parse(content)["tts"];
-                if (sttConfig["key"].is_null() ||
-                    sttConfig["key"].get<std::string>().empty())
+                json ttsConfig = json::parse(content)["tts"];
+                if (ttsConfig["key"].is_null() ||
+                    ttsConfig["key"].get<std::string>().empty())
                 {
                     throw std::runtime_error(
                         "Cannot get TTS key from config file");
                 }
-                return convUri + "?key=" + sttConfig["key"].get<std::string>();
+                return convUri + "?key=" + ttsConfig["key"].get<std::string>();
             }(configfile)},
             voice{voice}
         {}
@@ -163,7 +163,6 @@ struct TextToVoice::Handler
             base64::decode(&decoded[0], encoded.c_str(), decoded.size());
             return decoded;
         }
-
     } google;
 };
 
