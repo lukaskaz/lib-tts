@@ -28,6 +28,9 @@ add_executable(${PROJECT_NAME} ${APP_SOURCES} ${TEST_SOURCES})
 add_dependencies(${PROJECT_NAME} googletest)
 add_dependencies(${PROJECT_NAME} libshellcmd)
 add_dependencies(${PROJECT_NAME} libnlohmann)
+IF(NOT Boost_FOUND)
+    add_dependencies(${PROJECT_NAME} libboost)
+ENDIF()
 target_link_libraries(${PROJECT_NAME} shellcmd gtest gmock CURL::libcurl google-cloud-cpp::texttospeech)
 
 add_test(
