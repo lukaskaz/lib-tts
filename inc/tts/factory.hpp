@@ -2,37 +2,12 @@
 
 #include "shellcommand.hpp"
 #include "tts/helpers.hpp"
+#include "tts/interfaces/texttovoice.hpp"
 
-#include <cstdint>
-#include <string>
-#include <tuple>
+#include <memory>
 
 namespace tts
 {
-
-enum class language
-{
-    polish,
-    english,
-    german
-};
-
-enum class gender
-{
-    male,
-    female
-};
-
-using index = uint8_t;
-using voice_t = std::tuple<language, gender, index>;
-
-class TextToVoiceIf
-{
-  public:
-    virtual ~TextToVoiceIf() = default;
-    virtual void speak(const std::string&) = 0;
-    virtual void speak(const std::string&, const voice_t&) = 0;
-};
 
 template <typename T>
 class TextToVoiceFactory
