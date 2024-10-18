@@ -3,10 +3,13 @@ cmake_minimum_required(VERSION 3.10)
 set(CMAKE_CXX_STANDARD 20)
 project(tts)
 
+option(VCPKG_MANIFEST_MODE "Install vcpkg dependencies locally" ON)
+option(RUN_TESTS "Creates and runs unit tests for the project" OFF)
+
+include($ENV{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake)
 include(cmake/flags.cmake)
 include(cmake/dependencies.cmake)
 
-option(RUN_TESTS "Creates and runs unit tests for the project" OFF)
 
 if(RUN_TESTS)
     enable_testing()
