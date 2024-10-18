@@ -6,7 +6,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-psabi")
 project(tts-ut)
 enable_testing()
 
-option(VCPKG_MANIFEST_MODE "Install vcpkg dependencies locally" ON)     
 option(COVERAGE "Create test coverage report" ON)
 option(COVEXPORT "Export test coverage report" OFF)
 
