@@ -4,6 +4,10 @@
       "name": "google-cloud-cpp",
       "default-features": false,
       "features": ["texttospeech"]
+    },
+    {
+      "name": "curl",
+      "features": ["openssl"]
     }
   ]
 }
