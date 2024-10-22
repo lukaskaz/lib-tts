@@ -89,11 +89,10 @@ struct TextToVoice::Handler
             setvoice(mainVoice);
         }
 
-      private:
-        std::shared_ptr<ttshelpers::HelpersIf> helpers;
-        std::string audiourl;
-        std::string audiopath;
-        voice_t voice;
+        voice_t getvoice() const
+        {
+            return voice;
+        }
 
         void setvoice(const voice_t& voice)
         {
@@ -105,6 +104,12 @@ struct TextToVoice::Handler
                                        : voiceMap.at(defaultvoice);
             audiourl = std::string(convUri) + "&tl=" + usevoice + "&q=";
         }
+
+      private:
+        std::shared_ptr<ttshelpers::HelpersIf> helpers;
+        std::string audiourl;
+        std::string audiopath;
+        voice_t voice;
     } google;
 };
 
@@ -126,6 +131,16 @@ void TextToVoice::speak(const std::string& text, const voice_t& voice)
 {
     handler->google.getaudio(text, voice);
     handler->shell->run(playAudioCmd);
+}
+
+voice_t TextToVoice::getvoice()
+{
+    return handler->google.getvoice();
+}
+
+void TextToVoice::setvoice(const voice_t& voice)
+{
+    handler->google.setvoice(voice);
 }
 
 } // namespace googlebasic

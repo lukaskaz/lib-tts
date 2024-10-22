@@ -130,12 +130,10 @@ struct TextToVoice::Handler
             return response;
         }
 
-      private:
-        texttospeech_type::TextToSpeechClient client;
-        texttospeech::SynthesisInput input;
-        texttospeech::VoiceSelectionParams params;
-        texttospeech::AudioConfig audio;
-        voice_t voice;
+        voice_t getvoice() const
+        {
+            return voice;
+        }
 
         void setvoice(const voice_t& voice)
         {
@@ -150,6 +148,13 @@ struct TextToVoice::Handler
             params.set_name(name);
             params.set_ssml_gender(gender);
         }
+
+      private:
+        texttospeech_type::TextToSpeechClient client;
+        texttospeech::SynthesisInput input;
+        texttospeech::VoiceSelectionParams params;
+        texttospeech::AudioConfig audio;
+        voice_t voice;
     } google;
 };
 
@@ -173,6 +178,16 @@ void TextToVoice::speak(const std::string& text, const voice_t& voice)
     auto audio = handler->google.getaudio(text, voice);
     handler->filesystem.savetofile(audio);
     handler->shell->run(playAudioCmd);
+}
+
+voice_t TextToVoice::getvoice()
+{
+    return handler->google.getvoice();
+}
+
+void TextToVoice::setvoice(const voice_t& voice)
+{
+    handler->google.setvoice(voice);
 }
 
 } // namespace googlecloud

@@ -121,7 +121,7 @@ struct TextToVoice::Handler
 
         std::string getaudio(const std::string& text)
         {
-            const auto& [code, name, gender] = getvoice();
+            const auto& [code, name, gender] = getmappedvoice();
             const std::string config =
                 "{'input':{'text':'" + text + "'},'voice':{'languageCode':'" +
                 code + "','name':'" + name + "','ssmlGender':'" + gender +
@@ -142,12 +142,22 @@ struct TextToVoice::Handler
             return audio;
         }
 
+        voice_t getvoice() const
+        {
+            return voice;
+        }
+
+        void setvoice(const voice_t& voice)
+        {
+            this->voice = voice;
+        }
+
       private:
         std::shared_ptr<ttshelpers::HelpersIf> helpers;
         const std::string audiourl;
         voice_t voice;
 
-        decltype(voiceMap)::mapped_type getvoice() const
+        decltype(voiceMap)::mapped_type getmappedvoice() const
         {
             decltype(voice) defaultvoice = {std::get<language>(voice),
                                             std::get<gender>(voice), 1};
@@ -186,6 +196,16 @@ void TextToVoice::speak(const std::string& text, const voice_t& voice)
     auto audio = handler->google.getaudio(text, voice);
     handler->filesystem.savetofile(audio);
     handler->shell->run(playAudioCmd);
+}
+
+voice_t TextToVoice::getvoice()
+{
+    return handler->google.getvoice();
+}
+
+void TextToVoice::setvoice(const voice_t& voice)
+{
+    handler->google.setvoice(voice);
 }
 
 } // namespace googleapi
