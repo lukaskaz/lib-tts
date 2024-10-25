@@ -9,10 +9,7 @@
 #include <fstream>
 #include <map>
 
-namespace tts
-{
-
-namespace googlecloud
+namespace tts::googlecloud
 {
 
 namespace texttospeech = google::cloud::texttospeech::v1;
@@ -190,6 +187,4 @@ void TextToVoice::setvoice(const voice_t& voice)
     handler->google.setvoice(voice);
 }
 
-} // namespace googlecloud
-
-} // namespace tts
+} // namespace tts::googlecloud

@@ -2,10 +2,7 @@
 
 #include "tts/factory.hpp"
 
-namespace tts
-{
-
-namespace googlecloud
+namespace tts::googlecloud
 {
 
 class TextToVoice : public TextToVoiceIf
@@ -18,7 +15,7 @@ class TextToVoice : public TextToVoiceIf
     void setvoice(const voice_t&) override;
 
   private:
-    friend class TextToVoiceFactory<TextToVoice>;
+    friend class tts::TextToVoiceFactory;
     TextToVoice(std::shared_ptr<shell::ShellCommand>,
                 std::shared_ptr<ttshelpers::HelpersIf>, const voice_t&);
 
@@ -26,6 +23,4 @@ class TextToVoice : public TextToVoiceIf
     std::unique_ptr<Handler> handler;
 };
 
-} // namespace googlecloud
-
-} // namespace tts
+} // namespace tts::googlecloud
