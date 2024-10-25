@@ -9,7 +9,7 @@ enable_testing()
 option(COVERAGE "Create test coverage report" ON)
 option(COVEXPORT "Export test coverage report" OFF)
 
-include($ENV{VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake)
+include(cmake/vcpkg/setup.cmake)
 include(cmake/flags.cmake)
 include(cmake/dependencies.cmake)
 
