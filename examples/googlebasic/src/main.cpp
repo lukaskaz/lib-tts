@@ -7,10 +7,10 @@ int main()
     try
     {
         using namespace tts::googlebasic;
-        auto tts = tts::TextToVoiceFactory<TextToVoice>::create(
+        auto tts = tts::TextToVoiceFactory::create<TextToVoice>(
             {tts::language::polish, tts::gender::male, 1});
         tts->speak("Jestem twoim asystentem, co mam zrobić?");
-        tts::TextToVoiceFactory<TextToVoice>::create(
+        tts::TextToVoiceFactory::create<TextToVoice>(
             {tts::language::english, tts::gender::male, 1})
             ->speak("Hi, this is second speech!");
         tts->speak("Tschüss, wie gehts du?",

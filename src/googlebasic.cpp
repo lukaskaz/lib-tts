@@ -4,10 +4,7 @@
 #include <filesystem>
 #include <map>
 
-namespace tts
-{
-
-namespace googlebasic
+namespace tts::googlebasic
 {
 
 static const std::string audioDirectory = "audio/";
@@ -143,6 +140,4 @@ void TextToVoice::setvoice(const voice_t& voice)
     handler->google.setvoice(voice);
 }
 
-} // namespace googlebasic
-
-} // namespace tts
+} // namespace tts::googlebasic

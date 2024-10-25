@@ -9,21 +9,25 @@
 namespace tts
 {
 
-template <typename T>
 class TextToVoiceFactory
 {
   public:
+    template <typename T>
     static std::shared_ptr<TextToVoiceIf> create(const voice_t& voice)
     {
         auto shell = std::make_shared<shell::BashCommand>();
-        return create(shell, voice);
+        return create<T>(shell, voice);
     }
+
+    template <typename T>
     static std::shared_ptr<TextToVoiceIf>
         create(std::shared_ptr<shell::ShellCommand> shell, const voice_t& voice)
     {
         auto helpers = ttshelpers::HelpersFactory::create();
-        return create(shell, helpers, voice);
+        return create<T>(shell, helpers, voice);
     }
+
+    template <typename T>
     static std::shared_ptr<TextToVoiceIf>
         create(std::shared_ptr<shell::ShellCommand> shell,
                std::shared_ptr<ttshelpers::HelpersIf> helpers,

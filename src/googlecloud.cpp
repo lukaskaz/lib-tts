@@ -9,10 +9,7 @@
 #include <fstream>
 #include <map>
 
-namespace tts
-{
-
-namespace googlecloud
+namespace tts::googlecloud
 {
 
 namespace texttospeech = google::cloud::texttospeech::v1;
@@ -40,7 +37,7 @@ static const std::map<voice_t, std::tuple<std::string, std::string, ssmlgender>>
                 {{language::english, gender::female, 1},
                  {"en-US", "en-US-Standard-C", ssmlgender::FEMALE}},
                 {{language::english, gender::male, 1},
-                 {"en-US", "en-US-Standard-A", ssmlgender::MALE}},
+                 {"en-US", "en-US-Standard-D", ssmlgender::MALE}},
                 {{language::german, gender::female, 1},
                  {"de-DE", "de-DE-Standard-C", ssmlgender::FEMALE}},
                 {{language::german, gender::male, 1},
@@ -190,6 +187,4 @@ void TextToVoice::setvoice(const voice_t& voice)
     handler->google.setvoice(voice);
 }
 
-} // namespace googlecloud
-
-} // namespace tts
+} // namespace tts::googlecloud

@@ -31,6 +31,7 @@ class TextToVoiceIf
     virtual void speak(const std::string&, const voice_t&) = 0;
     virtual voice_t getvoice() = 0;
     virtual void setvoice(const voice_t&) = 0;
+    static void kill();
 };
 
 } // namespace tts

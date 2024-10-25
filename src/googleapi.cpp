@@ -8,10 +8,7 @@
 #include <fstream>
 #include <map>
 
-namespace tts
-{
-
-namespace googleapi
+namespace tts::googleapi
 {
 
 using json = nlohmann::json;
@@ -208,6 +205,4 @@ void TextToVoice::setvoice(const voice_t& voice)
     handler->google.setvoice(voice);
 }
 
-} // namespace googleapi
-
-} // namespace tts
+} // namespace tts::googleapi
