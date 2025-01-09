@@ -56,7 +56,7 @@ set(include_dir "${build_dir}/include")
 
 EXTERNALPROJECT_ADD(
   libboost
-  URL               "https://boostorg.jfrog.io/artifactory/main/release/1.74.0/source/boost_1_74_0.tar.gz"
+  URL               "https://archives.boost.io/release/1.74.0/source/boost_1_74_0.tar.gz"
   PATCH_COMMAND     ""
   PREFIX            libboost-workspace
   SOURCE_DIR        ${source_dir}
