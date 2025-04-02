@@ -1,13 +1,14 @@
 #include "tts/interfaces/texttovoice.hpp"
 
-#include "shellcommand.hpp"
+#include "shell/interfaces/linux/bash/shell.hpp"
 
 namespace tts
 {
 
 void tts::TextToVoiceIf::kill()
 {
-    shell::BashCommand().run("killall -s KILL play");
+    shell::Factory::create<shell::lnx::bash::Shell>()->run(
+        "killall -s KILL play");
 }
 
 } // namespace tts

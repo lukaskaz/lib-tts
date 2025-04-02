@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shellcommand.hpp"
+#include "shell/interfaces/linux/bash/shell.hpp"
 #include "tts/helpers.hpp"
 #include "tts/interfaces/texttovoice.hpp"
 
@@ -15,13 +15,13 @@ class TextToVoiceFactory
     template <typename T>
     static std::shared_ptr<TextToVoiceIf> create(const voice_t& voice)
     {
-        auto shell = std::make_shared<shell::BashCommand>();
+        auto shell = shell::Factory::create<shell::lnx::bash::Shell>();
         return create<T>(shell, voice);
     }
 
     template <typename T>
     static std::shared_ptr<TextToVoiceIf>
-        create(std::shared_ptr<shell::ShellCommand> shell, const voice_t& voice)
+        create(std::shared_ptr<shell::ShellIf> shell, const voice_t& voice)
     {
         auto helpers = ttshelpers::HelpersFactory::create();
         return create<T>(shell, helpers, voice);
@@ -29,7 +29,7 @@ class TextToVoiceFactory
 
     template <typename T>
     static std::shared_ptr<TextToVoiceIf>
-        create(std::shared_ptr<shell::ShellCommand> shell,
+        create(std::shared_ptr<shell::ShellIf> shell,
                std::shared_ptr<ttshelpers::HelpersIf> helpers,
                const voice_t& voice)
     {

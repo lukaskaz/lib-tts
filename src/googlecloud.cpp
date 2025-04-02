@@ -45,13 +45,13 @@ static const std::map<voice_t, std::tuple<std::string, std::string, ssmlgender>>
 
 struct TextToVoice::Handler
 {
-    explicit Handler(std::shared_ptr<shell::ShellCommand> shell,
+    explicit Handler(std::shared_ptr<shell::ShellIf> shell,
                      const voice_t& voice) :
         shell{shell},
         filesystem{audioDirectory, playbackName}, google{keyFile, voice}
     {}
 
-    std::shared_ptr<shell::ShellCommand> shell;
+    std::shared_ptr<shell::ShellIf> shell;
     class Filesystem
     {
       public:
@@ -155,7 +155,7 @@ struct TextToVoice::Handler
     } google;
 };
 
-TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> shell,
+TextToVoice::TextToVoice(std::shared_ptr<shell::ShellIf> shell,
                          std::shared_ptr<ttshelpers::HelpersIf>,
                          const voice_t& voice) :
     handler{std::make_unique<Handler>(shell, voice)}

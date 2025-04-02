@@ -45,15 +45,15 @@ static const std::map<voice_t,
 struct TextToVoice::Handler
 {
   public:
-    Handler(std::shared_ptr<shell::ShellCommand> shell,
+    Handler(std::shared_ptr<shell::ShellIf> shell,
             std::shared_ptr<ttshelpers::HelpersIf> helpers,
             const voice_t& voice) :
         shell{shell},
-        filesystem{audioDirectory, playbackName},
-        google{configFile, helpers, voice}
+        filesystem{audioDirectory, playbackName}, google{configFile, helpers,
+                                                         voice}
     {}
 
-    std::shared_ptr<shell::ShellCommand> shell;
+    std::shared_ptr<shell::ShellIf> shell;
     class Filesystem
     {
       public:
@@ -173,7 +173,7 @@ struct TextToVoice::Handler
     } google;
 };
 
-TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> shell,
+TextToVoice::TextToVoice(std::shared_ptr<shell::ShellIf> shell,
                          std::shared_ptr<ttshelpers::HelpersIf> helpers,
                          const voice_t& voice) :
     handler{std::make_unique<Handler>(shell, helpers, voice)}

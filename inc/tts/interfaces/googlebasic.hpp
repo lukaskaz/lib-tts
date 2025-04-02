@@ -16,7 +16,7 @@ class TextToVoice : public TextToVoiceIf
 
   private:
     friend class tts::TextToVoiceFactory;
-    TextToVoice(std::shared_ptr<shell::ShellCommand>,
+    TextToVoice(std::shared_ptr<shell::ShellIf>,
                 std::shared_ptr<ttshelpers::HelpersIf>, const voice_t&);
 
     struct Handler;
