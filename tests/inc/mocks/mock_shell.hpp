@@ -1,6 +1,6 @@
 #pragma once
 
-#include "shellcommand.hpp"
+#include "shell/interfaces/shell.hpp"
 
 #include <gmock/gmock.h>
 

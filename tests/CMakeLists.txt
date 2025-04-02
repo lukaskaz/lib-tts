@@ -32,7 +32,7 @@ add_dependencies(${PROJECT_NAME} libnlohmann)
 IF(NOT Boost_FOUND)
     add_dependencies(${PROJECT_NAME} libboost)
 ENDIF()
-target_link_libraries(${PROJECT_NAME} shellcmd gtest gmock CURL::libcurl google-cloud-cpp::texttospeech)
+target_link_libraries(${PROJECT_NAME} shell gtest gmock CURL::libcurl google-cloud-cpp::texttospeech)
 
 add_test(
     NAME ${PROJECT_NAME}
