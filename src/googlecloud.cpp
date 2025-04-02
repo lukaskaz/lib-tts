@@ -4,6 +4,8 @@
 #include "google/cloud/credentials.h"
 #include "google/cloud/texttospeech/v1/text_to_speech_client.h"
 
+#include "shell/interfaces/linux/bash/shell.hpp"
+
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
@@ -16,6 +18,9 @@ namespace tts::googlecloud
 namespace texttospeech = google::cloud::texttospeech::v1;
 namespace texttospeech_type = google::cloud::texttospeech_v1;
 
+using namespace std::string_literals;
+using ssmlgender = texttospeech::SsmlVoiceGender;
+
 static const std::string audioDirectory = "audio/";
 static const std::string playbackName = "playback.mp3";
 static const std::string playAudioCmd =
@@ -23,7 +28,6 @@ static const std::string playAudioCmd =
 // static constexpr const char* keyEnvVar = "GOOGLE_APPLICATION_CREDENTIALS";
 static const std::string keyFile = "../conf/key.json";
 
-using ssmlgender = texttospeech::SsmlVoiceGender;
 static const std::map<voice_t, std::tuple<std::string, std::string, ssmlgender>>
     voiceMap = {{{language::polish, gender::female, 1},
                  {"pl-PL", "pl-PL-Standard-E", ssmlgender::FEMALE}},
@@ -47,10 +51,20 @@ static const std::map<voice_t, std::tuple<std::string, std::string, ssmlgender>>
 struct TextToVoice::Handler
 {
   public:
-    explicit Handler(std::shared_ptr<shell::ShellIf> shell,
-                     const voice_t& voice) :
-        shell{shell},
-        filesystem{audioDirectory, playbackName}, google{keyFile, voice}
+    explicit Handler(const configmin_t& config) :
+        logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
+        shell{shell::Factory::create<shell::lnx::bash::Shell>()},
+        filesystem{audioDirectory, playbackName}, google{
+                                                      keyFile,
+                                                      std::get<voice_t>(config)}
+    {}
+
+    explicit Handler(const configall_t& config) :
+        logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
+        shell{std::get<std::shared_ptr<shell::ShellIf>>(config)},
+        filesystem{audioDirectory, playbackName}, google{
+                                                      keyFile,
+                                                      std::get<voice_t>(config)}
     {}
 
     void speak(const std::string& text)
@@ -188,11 +202,21 @@ struct TextToVoice::Handler
     }
 };
 
-TextToVoice::TextToVoice(std::shared_ptr<shell::ShellIf> shell,
-                         std::shared_ptr<ttshelpers::HelpersIf>,
-                         const voice_t& voice) :
-    handler{std::make_unique<Handler>(shell, voice)}
-{}
+TextToVoice::TextToVoice(const config_t& config)
+{
+    handler = std::visit(
+        [](const auto& config) -> decltype(TextToVoice::handler) {
+            if constexpr (!std::is_same<const std::monostate&,
+                                        decltype(config)>())
+            {
+                return std::make_unique<TextToVoice::Handler>(config);
+            }
+            throw std::runtime_error(
+                std::source_location::current().function_name() +
+                "-> config not supported"s);
+        },
+        config);
+}
 TextToVoice::~TextToVoice() = default;
 
 void TextToVoice::speak(const std::string& text)

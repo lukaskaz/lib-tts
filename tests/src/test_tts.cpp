@@ -46,8 +46,9 @@ TEST_F(TestTts, googleBasicCreatedAndUsed_voiceIsChangedAndRestored)
         .WillOnce(DoAll(SaveArg<0>(&urlthird), Return(true)));
     EXPECT_CALL(*shellMock, run(_)).Times(1);
 
-    auto tts = TextToVoiceFactory::create<googlebasic::TextToVoice>(
-        shellMock, helpersMock, initialvoice);
+    auto tts = TextToVoiceFactory::create<googlebasic::TextToVoice,
+                                          googlebasic::configall_t>(
+        {initialvoice, shellMock, helpersMock, {}});
     tts->speak(testmessage);
     tts->speak(testmessage, changedvoice);
     tts->speak(testmessage);
@@ -60,8 +61,9 @@ TEST_F(TestTts, googleBasicCreated_checkedVoiceIsCorrect)
 {
     const voice_t usedvoice{language::english, gender::male, 1};
 
-    auto tts = TextToVoiceFactory::create<googlebasic::TextToVoice>(
-        shellMock, helpersMock, usedvoice);
+    auto tts = TextToVoiceFactory::create<googlebasic::TextToVoice,
+                                          googlebasic::configall_t>(
+        {usedvoice, shellMock, helpersMock, {}});
     EXPECT_EQ(usedvoice, tts->getvoice());
 }
 
@@ -70,8 +72,9 @@ TEST_F(TestTts, googleBasicCreatedAndVoiceChanged_voiceChangedProperly)
     const voice_t initialvoice{language::english, gender::male, 1},
         newvoice{language::german, gender::female, 1};
 
-    auto tts = TextToVoiceFactory::create<googlebasic::TextToVoice>(
-        shellMock, helpersMock, initialvoice);
+    auto tts = TextToVoiceFactory::create<googlebasic::TextToVoice,
+                                          googlebasic::configall_t>(
+        {initialvoice, shellMock, helpersMock, {}});
     ASSERT_NE(newvoice, tts->getvoice());
 
     tts->setvoice(newvoice);
@@ -100,8 +103,9 @@ TEST_F(TestTts, googleApiCreatedAndUsed_voiceIsChangedAndRestored)
                         Return(true)));
     EXPECT_CALL(*shellMock, run(_)).Times(1);
 
-    auto tts = TextToVoiceFactory::create<googleapi::TextToVoice>(
-        shellMock, helpersMock, initialvoice);
+    auto tts = TextToVoiceFactory::create<googleapi::TextToVoice,
+                                          googleapi::configall_t>(
+        {initialvoice, shellMock, helpersMock, {}});
     tts->speak(testmessage);
     tts->speak(testmessage, changedvoice);
     tts->speak(testmessage);
@@ -114,8 +118,9 @@ TEST_F(TestTts, googleApiCreated_checkedVoiceIsCorrect)
 {
     const voice_t usedvoice{language::english, gender::male, 1};
 
-    auto tts = TextToVoiceFactory::create<googleapi::TextToVoice>(
-        shellMock, helpersMock, usedvoice);
+    auto tts = TextToVoiceFactory::create<googleapi::TextToVoice,
+                                          googleapi::configall_t>(
+        {usedvoice, shellMock, helpersMock, {}});
     EXPECT_EQ(usedvoice, tts->getvoice());
 }
 
@@ -124,8 +129,9 @@ TEST_F(TestTts, googleApiCreatedAndVoiceChanged_voiceChangedProperly)
     const voice_t initialvoice{language::english, gender::male, 1},
         newvoice{language::german, gender::female, 1};
 
-    auto tts = TextToVoiceFactory::create<googleapi::TextToVoice>(
-        shellMock, helpersMock, initialvoice);
+    auto tts = TextToVoiceFactory::create<googleapi::TextToVoice,
+                                          googleapi::configall_t>(
+        {initialvoice, shellMock, helpersMock, {}});
     ASSERT_NE(newvoice, tts->getvoice());
 
     tts->setvoice(newvoice);
@@ -136,9 +142,10 @@ TEST_F(TestTts, googleCloudCreatedAndUsed_speakThrows)
 {
     const std::string testmessage = "Test message googlecloud!";
     const voice_t voice{language::english, gender::male, 1};
-    EXPECT_THROW(TextToVoiceFactory::create<googlecloud::TextToVoice>(
-                     shellMock, helpersMock, voice)
-                     ->speak(testmessage),
+    EXPECT_THROW((TextToVoiceFactory::create<googlecloud::TextToVoice,
+                                             googlecloud::configall_t>(
+                      {voice, shellMock, {}})
+                      ->speak(testmessage)),
                  std::runtime_error);
 }
 
@@ -147,9 +154,10 @@ TEST_F(TestTts, googleCloudCreatedAndUsed_speakWithChangedVoiceThrows)
     const std::string testmessage = "Test message googlecloud!";
     const voice_t initialvoice{language::english, gender::male, 1},
         changedvoice = {language::polish, gender::male, 1};
-    EXPECT_THROW(TextToVoiceFactory::create<googlecloud::TextToVoice>(
-                     shellMock, helpersMock, initialvoice)
-                     ->speak(testmessage, changedvoice),
+    EXPECT_THROW((TextToVoiceFactory::create<googlecloud::TextToVoice,
+                                             googlecloud::configall_t>(
+                      {initialvoice, shellMock, {}})
+                      ->speak(testmessage, changedvoice)),
                  std::runtime_error);
 }
 
@@ -176,8 +184,9 @@ TEST_F(TestTts, googleCloudCreated_checkedVoiceIsCorrect)
     ConfigDummy config;
     const voice_t usedvoice{language::english, gender::male, 1};
 
-    auto tts = TextToVoiceFactory::create<googlecloud::TextToVoice>(
-        shellMock, helpersMock, usedvoice);
+    auto tts = TextToVoiceFactory::create<googlecloud::TextToVoice,
+                                          googlecloud::configall_t>(
+        {usedvoice, shellMock, {}});
     EXPECT_EQ(usedvoice, tts->getvoice());
 }
 
@@ -187,8 +196,9 @@ TEST_F(TestTts, googleCloudCreatedAndVoiceChanged_voiceChangedProperly)
     const voice_t initialvoice{language::english, gender::male, 1},
         newvoice{language::german, gender::female, 1};
 
-    auto tts = TextToVoiceFactory::create<googlecloud::TextToVoice>(
-        shellMock, helpersMock, initialvoice);
+    auto tts = TextToVoiceFactory::create<googlecloud::TextToVoice,
+                                          googlecloud::configall_t>(
+        {initialvoice, shellMock, {}});
     ASSERT_NE(newvoice, tts->getvoice());
 
     tts->setvoice(newvoice);
@@ -218,8 +228,9 @@ TEST_P(TestTtsParams, gooleBasicCreatedAndUsed_shellAndCurlCalledOnce)
     EXPECT_CALL(*helpersMock, downloadFile(_, testmessage, _)).Times(1);
 
     const auto& voice = GetParam();
-    TextToVoiceFactory::create<googlebasic::TextToVoice>(shellMock, helpersMock,
-                                                         voice)
+    TextToVoiceFactory::create<googlebasic::TextToVoice,
+                               googlebasic::configall_t>(
+        {voice, shellMock, helpersMock, {}})
         ->speak(testmessage);
 }
 
@@ -232,8 +243,8 @@ TEST_P(TestTtsParams, gooleApiCreatedAndUsed_shellAndCurlCalledOnce)
         .WillOnce(DoAll(SetArgReferee<2>(resultjson), Return(true)));
 
     const auto& voice = GetParam();
-    TextToVoiceFactory::create<googleapi::TextToVoice>(shellMock, helpersMock,
-                                                       voice)
+    TextToVoiceFactory::create<googleapi::TextToVoice, googleapi::configall_t>(
+        {voice, shellMock, helpersMock, {}})
         ->speak(testmessage);
 }
 

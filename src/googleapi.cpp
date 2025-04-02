@@ -1,5 +1,7 @@
 #include "tts/interfaces/googleapi.hpp"
 
+#include "shell/interfaces/linux/bash/shell.hpp"
+
 #include <boost/beast/core/detail/base64.hpp>
 #include <nlohmann/json.hpp>
 
@@ -12,6 +14,7 @@
 namespace tts::googleapi
 {
 
+using namespace std::string_literals;
 using json = nlohmann::json;
 
 static const std::string audioDirectory = "audio/";
@@ -46,12 +49,21 @@ static const std::map<voice_t,
 struct TextToVoice::Handler
 {
   public:
-    Handler(std::shared_ptr<shell::ShellIf> shell,
-            std::shared_ptr<ttshelpers::HelpersIf> helpers,
-            const voice_t& voice) :
-        shell{shell},
-        filesystem{audioDirectory, playbackName}, google{configFile, helpers,
-                                                         voice}
+    explicit Handler(const configmin_t& config) :
+        logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
+        shell{shell::Factory::create<shell::lnx::bash::Shell>()},
+        filesystem{audioDirectory, playbackName},
+        google{configFile, ttshelpers::HelpersFactory::create(),
+               std::get<voice_t>(config)}
+    {}
+
+    explicit Handler(const configall_t& config) :
+        logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
+        shell{std::get<std::shared_ptr<shell::ShellIf>>(config)},
+        filesystem{audioDirectory, playbackName},
+        google{configFile,
+               std::get<std::shared_ptr<ttshelpers::HelpersIf>>(config),
+               std::get<voice_t>(config)}
     {}
 
     void speak(const std::string& text)
@@ -205,11 +217,21 @@ struct TextToVoice::Handler
     }
 };
 
-TextToVoice::TextToVoice(std::shared_ptr<shell::ShellIf> shell,
-                         std::shared_ptr<ttshelpers::HelpersIf> helpers,
-                         const voice_t& voice) :
-    handler{std::make_unique<Handler>(shell, helpers, voice)}
-{}
+TextToVoice::TextToVoice(const config_t& config)
+{
+    handler = std::visit(
+        [](const auto& config) -> decltype(TextToVoice::handler) {
+            if constexpr (!std::is_same<const std::monostate&,
+                                        decltype(config)>())
+            {
+                return std::make_unique<TextToVoice::Handler>(config);
+            }
+            throw std::runtime_error(
+                std::source_location::current().function_name() +
+                "-> config not supported"s);
+        },
+        config);
+}
 TextToVoice::~TextToVoice() = default;
 
 void TextToVoice::speak(const std::string& text)
