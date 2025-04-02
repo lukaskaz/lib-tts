@@ -7,6 +7,7 @@
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <source_location>
 
 namespace tts::googleapi
 {
@@ -53,7 +54,31 @@ struct TextToVoice::Handler
                                                          voice}
     {}
 
-    std::shared_ptr<shell::ShellIf> shell;
+    void speak(const std::string& text)
+    {
+        speak(text, getvoice());
+    }
+
+    void speak(const std::string& text, const voice_t& voice)
+    {
+        auto audio = google.getaudio(text, voice);
+        filesystem.savetofile(audio);
+        shell->run(playAudioCmd);
+    }
+
+    void setvoice(const voice_t& voice)
+    {
+        google.setvoice(voice);
+    }
+
+    voice_t getvoice() const
+    {
+        return google.getvoice();
+    }
+
+  private:
+    const std::shared_ptr<logs::LogIf> logif;
+    const std::shared_ptr<shell::ShellIf> shell;
     class Filesystem
     {
       public:
@@ -88,7 +113,6 @@ struct TextToVoice::Handler
         const std::string filename;
         bool direxist;
     } filesystem;
-
     class Google
     {
       public:
@@ -171,6 +195,14 @@ struct TextToVoice::Handler
             return decoded;
         }
     } google;
+
+    void log(
+        logs::level level, const std::string& msg,
+        const std::source_location loc = std::source_location::current()) const
+    {
+        if (logif)
+            logif->log(level, std::string{loc.function_name()}, msg);
+    }
 };
 
 TextToVoice::TextToVoice(std::shared_ptr<shell::ShellIf> shell,
@@ -178,31 +210,26 @@ TextToVoice::TextToVoice(std::shared_ptr<shell::ShellIf> shell,
                          const voice_t& voice) :
     handler{std::make_unique<Handler>(shell, helpers, voice)}
 {}
-
 TextToVoice::~TextToVoice() = default;
 
 void TextToVoice::speak(const std::string& text)
 {
-    auto audio = handler->google.getaudio(text);
-    handler->filesystem.savetofile(audio);
-    handler->shell->run(playAudioCmd);
+    handler->speak(text);
 }
 
 void TextToVoice::speak(const std::string& text, const voice_t& voice)
 {
-    auto audio = handler->google.getaudio(text, voice);
-    handler->filesystem.savetofile(audio);
-    handler->shell->run(playAudioCmd);
+    handler->speak(text, voice);
 }
 
 voice_t TextToVoice::getvoice()
 {
-    return handler->google.getvoice();
+    return handler->getvoice();
 }
 
 void TextToVoice::setvoice(const voice_t& voice)
 {
-    handler->google.setvoice(voice);
+    handler->setvoice(voice);
 }
 
 } // namespace tts::googleapi

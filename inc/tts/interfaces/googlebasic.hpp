@@ -1,5 +1,6 @@
 #pragma once
 
+#include "logs/interfaces/logs.hpp"
 #include "tts/factory.hpp"
 
 namespace tts::googlebasic
