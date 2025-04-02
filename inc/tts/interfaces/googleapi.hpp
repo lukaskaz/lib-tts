@@ -23,6 +23,8 @@ class TextToVoice : public TextToVoiceIf
     ~TextToVoice();
     void speak(const std::string&) override;
     void speak(const std::string&, const voice_t&) override;
+    void speakasync(const std::string&) override;
+    void speakasync(const std::string&, const voice_t&) override;
     voice_t getvoice() override;
     void setvoice(const voice_t&) override;
 

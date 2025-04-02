@@ -1,13 +1,18 @@
 #include "tts/helpers.hpp"
 
+#include "tts/interfaces/texttovoice.hpp"
+
 #include <curl/curl.h>
 #include <curl/easy.h>
 
 #include <fstream>
+#include <future>
 #include <vector>
 
 namespace ttshelpers
 {
+
+std::future<void> async;
 
 static size_t DownloadWriteFunction(char* data, size_t size, size_t nmemb,
                                     std::ofstream* ofs)
@@ -70,6 +75,17 @@ bool Helpers::uploadData(const std::string& url, const std::string& datastr,
         curl_easy_cleanup(curl);
     }
     return res == CURLE_OK;
+}
+
+bool Helpers::createasync(std::function<void()>&& func)
+{
+    if (async.valid())
+    {
+        tts::TextToVoiceIf::kill();
+        async.wait();
+    }
+    async = std::async(std::launch::async, std::move(func));
+    return true;
 }
 
 } // namespace ttshelpers

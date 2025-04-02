@@ -144,7 +144,7 @@ TEST_F(TestTts, googleCloudCreatedAndUsed_speakThrows)
     const voice_t voice{language::english, gender::male, 1};
     EXPECT_THROW((TextToVoiceFactory::create<googlecloud::TextToVoice,
                                              googlecloud::configall_t>(
-                      {voice, shellMock, {}})
+                      {voice, shellMock, helpersMock, {}})
                       ->speak(testmessage)),
                  std::runtime_error);
 }
@@ -156,7 +156,7 @@ TEST_F(TestTts, googleCloudCreatedAndUsed_speakWithChangedVoiceThrows)
         changedvoice = {language::polish, gender::male, 1};
     EXPECT_THROW((TextToVoiceFactory::create<googlecloud::TextToVoice,
                                              googlecloud::configall_t>(
-                      {initialvoice, shellMock, {}})
+                      {initialvoice, shellMock, helpersMock, {}})
                       ->speak(testmessage, changedvoice)),
                  std::runtime_error);
 }
@@ -186,7 +186,7 @@ TEST_F(TestTts, googleCloudCreated_checkedVoiceIsCorrect)
 
     auto tts = TextToVoiceFactory::create<googlecloud::TextToVoice,
                                           googlecloud::configall_t>(
-        {usedvoice, shellMock, {}});
+        {usedvoice, shellMock, helpersMock, {}});
     EXPECT_EQ(usedvoice, tts->getvoice());
 }
 
@@ -198,7 +198,7 @@ TEST_F(TestTts, googleCloudCreatedAndVoiceChanged_voiceChangedProperly)
 
     auto tts = TextToVoiceFactory::create<googlecloud::TextToVoice,
                                           googlecloud::configall_t>(
-        {initialvoice, shellMock, {}});
+        {initialvoice, shellMock, helpersMock, {}});
     ASSERT_NE(newvoice, tts->getvoice());
 
     tts->setvoice(newvoice);

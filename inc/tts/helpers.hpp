@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <memory>
 #include <string>
 
@@ -24,6 +25,8 @@ class Helpers : public HelpersIf
                     std::string&) override;
     bool downloadFile(std::string&, const std::string&,
                       const std::string&) override;
+
+    bool createasync(std::function<void()>&&);
 
   private:
     friend class HelpersFactory;

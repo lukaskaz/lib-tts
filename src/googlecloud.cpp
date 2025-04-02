@@ -54,6 +54,7 @@ struct TextToVoice::Handler
     explicit Handler(const configmin_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{shell::Factory::create<shell::lnx::bash::Shell>()},
+        helpers{ttshelpers::HelpersFactory::create()},
         filesystem{audioDirectory, playbackName}, google{
                                                       keyFile,
                                                       std::get<voice_t>(config)}
@@ -62,6 +63,7 @@ struct TextToVoice::Handler
     explicit Handler(const configall_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{std::get<std::shared_ptr<shell::ShellIf>>(config)},
+        helpers{std::get<std::shared_ptr<ttshelpers::HelpersIf>>(config)},
         filesystem{audioDirectory, playbackName}, google{
                                                       keyFile,
                                                       std::get<voice_t>(config)}
@@ -79,6 +81,14 @@ struct TextToVoice::Handler
         shell->run(playAudioCmd);
     }
 
+    void speakasync(const std::string& text)
+    {
+        speakasync(text, getvoice());
+    }
+
+    void speakasync(const std::string& text, const voice_t& voice)
+    {}
+
     void setvoice(const voice_t& voice)
     {
         google.setvoice(voice);
@@ -92,6 +102,7 @@ struct TextToVoice::Handler
   private:
     const std::shared_ptr<logs::LogIf> logif;
     const std::shared_ptr<shell::ShellIf> shell;
+    const std::shared_ptr<ttshelpers::HelpersIf> helpers;
     class Filesystem
     {
       public:
@@ -227,6 +238,16 @@ void TextToVoice::speak(const std::string& text)
 void TextToVoice::speak(const std::string& text, const voice_t& voice)
 {
     handler->speak(text, voice);
+}
+
+void TextToVoice::speakasync(const std::string& text)
+{
+    handler->speakasync(text);
+}
+
+void TextToVoice::speakasync(const std::string& text, const voice_t& voice)
+{
+    handler->speakasync(text, voice);
 }
 
 voice_t TextToVoice::getvoice()
