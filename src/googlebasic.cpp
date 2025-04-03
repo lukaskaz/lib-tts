@@ -180,7 +180,7 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
         ~Google()
         {
             handler->log(logs::level::info,
-                         "Release gbasic tts [lang/gender/idx]: " +
+                         "Released gbasic tts [lang/gender/idx]: " +
                              getparams());
         }
 

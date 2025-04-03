@@ -218,7 +218,7 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
         ~Google()
         {
             handler->log(logs::level::info,
-                         "Release gcloud tts [langcode/langname/gender]: " +
+                         "Released gcloud tts [langcode/langname/gender]: " +
                              getparams());
         }
 

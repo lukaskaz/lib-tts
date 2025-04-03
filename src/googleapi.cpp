@@ -216,7 +216,7 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
         ~Google()
         {
             handler->log(logs::level::info,
-                         "Release gapi tts [langcode/langname/gender]: " +
+                         "Released gapi tts [langcode/langname/gender]: " +
                              getparams());
         }
 
