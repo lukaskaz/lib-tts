@@ -9,7 +9,7 @@
 #include <future>
 #include <vector>
 
-namespace ttshelpers
+namespace helpers
 {
 
 std::future<void> async;
@@ -88,4 +88,4 @@ bool Helpers::createasync(std::function<void()>&& func)
     return true;
 }
 
-} // namespace ttshelpers
+} // namespace helpers

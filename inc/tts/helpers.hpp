@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 
-namespace ttshelpers
+namespace helpers
 {
 
 class HelpersIf
@@ -16,6 +16,7 @@ class HelpersIf
                             std::string&) = 0;
     virtual bool downloadFile(std::string&, const std::string&,
                               const std::string&) = 0;
+    virtual bool createasync(std::function<void()>&&) = 0;
 };
 
 class Helpers : public HelpersIf
@@ -42,4 +43,12 @@ class HelpersFactory
     }
 };
 
-} // namespace ttshelpers
+std::string str(const auto& value)
+{
+    if constexpr (std::is_same<const std::string&, decltype(value)>())
+        return value;
+    else
+        return std::to_string(value);
+}
+
+} // namespace helpers

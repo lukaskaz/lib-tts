@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <mutex>
 #include <source_location>
 
 namespace tts::googleapi
@@ -46,45 +47,56 @@ static const std::map<voice_t,
                 {{language::german, gender::male, 1},
                  {"de-DE", "de-DE-Standard-B", "MALE"}}};
 
-struct TextToVoice::Handler
+struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
 {
   public:
     explicit Handler(const configmin_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{shell::Factory::create<shell::lnx::bash::Shell>()},
-        filesystem{audioDirectory, playbackName},
-        google{configFile, ttshelpers::HelpersFactory::create(),
-               std::get<voice_t>(config)}
+        helpers{helpers::HelpersFactory::create()}, filesystem{audioDirectory,
+                                                               playbackName},
+        google{configFile, helpers, std::get<voice_t>(config)}
     {}
 
     explicit Handler(const configall_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{std::get<std::shared_ptr<shell::ShellIf>>(config)},
-        filesystem{audioDirectory, playbackName},
-        google{configFile,
-               std::get<std::shared_ptr<ttshelpers::HelpersIf>>(config),
-               std::get<voice_t>(config)}
+        helpers{std::get<std::shared_ptr<helpers::HelpersIf>>(config)},
+        filesystem{audioDirectory, playbackName}, google{
+                                                      configFile, helpers,
+                                                      std::get<voice_t>(config)}
     {}
 
-    void speak(const std::string& text)
+    bool speak(const std::string& text)
     {
-        speak(text, getvoice());
+        return speak(text, getvoice());
     }
 
-    void speak(const std::string& text, const voice_t& voice)
+    bool speak(const std::string& text, const voice_t& voice)
     {
-        auto audio = google.getaudio(text, voice);
-        filesystem.savetofile(audio);
-        shell->run(playAudioCmd);
+        if (std::unique_lock<std::mutex>(mtx, std::try_to_lock).owns_lock())
+        {
+            auto audio = google.getaudio(text, voice);
+            filesystem.savetofile(audio);
+            shell->run(playAudioCmd);
+            return true;
+        }
+        return false;
     }
 
-    void speakasync(const std::string& text)
+    bool speakasync(const std::string& text)
     {
-        speakasync(text, getvoice());
+        return speakasync(text, getvoice());
     }
 
-    void speakasync(const std::string& text, const voice_t& voice)
-    {}
+    bool speakasync(const std::string& text, const voice_t& voice)
+    {
+        helpers->createasync([weak = weak_from_this(), text, voice]() {
+            if (auto self = weak.lock())
+                self->speak(text, voice);
+        });
+        return true;
+    }
 
     void setvoice(const voice_t& voice)
     {
@@ -99,6 +111,8 @@ struct TextToVoice::Handler
   private:
     const std::shared_ptr<logs::LogIf> logif;
     const std::shared_ptr<shell::ShellIf> shell;
+    const std::shared_ptr<helpers::HelpersIf> helpers;
+    std::mutex mtx;
     class Filesystem
     {
       public:
@@ -137,7 +151,7 @@ struct TextToVoice::Handler
     {
       public:
         Google(const std::string& configfile,
-               std::shared_ptr<ttshelpers::HelpersIf> helpers,
+               std::shared_ptr<helpers::HelpersIf> helpers,
                const voice_t& voice) :
             helpers{helpers},
             audiourl{[](const std::string& file) {
@@ -194,7 +208,7 @@ struct TextToVoice::Handler
         }
 
       private:
-        std::shared_ptr<ttshelpers::HelpersIf> helpers;
+        const std::shared_ptr<helpers::HelpersIf> helpers;
         const std::string audiourl;
         voice_t voice;
 
@@ -242,24 +256,24 @@ TextToVoice::TextToVoice(const config_t& config)
 }
 TextToVoice::~TextToVoice() = default;
 
-void TextToVoice::speak(const std::string& text)
+bool TextToVoice::speak(const std::string& text)
 {
-    handler->speak(text);
+    return handler->speak(text);
 }
 
-void TextToVoice::speak(const std::string& text, const voice_t& voice)
+bool TextToVoice::speak(const std::string& text, const voice_t& voice)
 {
-    handler->speak(text, voice);
+    return handler->speak(text, voice);
 }
 
-void TextToVoice::speakasync(const std::string& text)
+bool TextToVoice::speakasync(const std::string& text)
 {
-    handler->speakasync(text);
+    return handler->speakasync(text);
 }
 
-void TextToVoice::speakasync(const std::string& text, const voice_t& voice)
+bool TextToVoice::speakasync(const std::string& text, const voice_t& voice)
 {
-    handler->speakasync(text, voice);
+    return handler->speakasync(text, voice);
 }
 
 voice_t TextToVoice::getvoice()
