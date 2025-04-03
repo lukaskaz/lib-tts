@@ -27,12 +27,13 @@ file(GLOB TEST_SOURCES "src/*.cpp")
 add_executable(${PROJECT_NAME} ${APP_SOURCES} ${TEST_SOURCES})
 
 add_dependencies(${PROJECT_NAME} googletest)
+add_dependencies(${PROJECT_NAME} liblogger)
 add_dependencies(${PROJECT_NAME} libshellcmd)
 add_dependencies(${PROJECT_NAME} libnlohmann)
 IF(NOT Boost_FOUND)
     add_dependencies(${PROJECT_NAME} libboost)
 ENDIF()
-target_link_libraries(${PROJECT_NAME} shellcmd gtest gmock CURL::libcurl google-cloud-cpp::texttospeech)
+target_link_libraries(${PROJECT_NAME} logger shell gtest gmock CURL::libcurl google-cloud-cpp::texttospeech)
 
 add_test(
     NAME ${PROJECT_NAME}
@@ -70,7 +71,7 @@ add_custom_command(TARGET coverage
 add_custom_command(TARGET coverage
     COMMENT "Collecting data ${SOURCES_PATH}/inc/*"
     COMMAND lcov --capture --rc lcov_branch_coverage=1 --directory ${OBJECTS_DIR}
-        --output-file coverage.info
+        --output-file coverage.info --ignore-errors mismatch
     COMMAND lcov --extract coverage.info '${SOURCES_PATH}/src/*' '${SOURCES_PATH}/inc/*'
         --output-file coverage.info
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}

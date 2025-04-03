@@ -4,10 +4,15 @@
 #include "google/cloud/credentials.h"
 #include "google/cloud/texttospeech/v1/text_to_speech_client.h"
 
+#include "shell/interfaces/linux/bash/shell.hpp"
+#include "tts/helpers.hpp"
+
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <mutex>
+#include <source_location>
 
 namespace tts::googlecloud
 {
@@ -15,14 +20,18 @@ namespace tts::googlecloud
 namespace texttospeech = google::cloud::texttospeech::v1;
 namespace texttospeech_type = google::cloud::texttospeech_v1;
 
-static const std::string audioDirectory = "audio/";
-static const std::string playbackName = "playback.mp3";
-static const std::string playAudioCmd =
-    "play --no-show-progress " + audioDirectory + playbackName + " --type alsa";
-// static constexpr const char* keyEnvVar = "GOOGLE_APPLICATION_CREDENTIALS";
-static const std::string keyFile = "../conf/key.json";
-
+using namespace helpers;
+using namespace std::string_literals;
 using ssmlgender = texttospeech::SsmlVoiceGender;
+
+static const std::filesystem::path keyFile = "../conf/key.json";
+static const std::filesystem::path audioDirectory = "audio";
+static const std::filesystem::path playbackName = "playback.mp3";
+static const std::string playAudioCmd =
+    "play --no-show-progress " + (audioDirectory / playbackName).native() +
+    " --type alsa";
+// static constexpr const char* keyEnvVar = "GOOGLE_APPLICATION_CREDENTIALS";
+
 static const std::map<voice_t, std::tuple<std::string, std::string, ssmlgender>>
     voiceMap = {{{language::polish, gender::female, 1},
                  {"pl-PL", "pl-PL-Standard-E", ssmlgender::FEMALE}},
@@ -43,20 +52,94 @@ static const std::map<voice_t, std::tuple<std::string, std::string, ssmlgender>>
                 {{language::german, gender::male, 1},
                  {"de-DE", "de-DE-Standard-B", ssmlgender::MALE}}};
 
-struct TextToVoice::Handler
+struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
 {
-    explicit Handler(std::shared_ptr<shell::ShellCommand> shell,
-                     const voice_t& voice) :
-        shell{shell},
-        filesystem{audioDirectory, playbackName}, google{keyFile, voice}
+  public:
+    explicit Handler(const configmin_t& config) :
+        logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
+        shell{shell::Factory::create<shell::lnx::bash::Shell>()},
+        helpers{helpers::HelpersFactory::create()},
+        filesystem{this, audioDirectory / playbackName},
+        google{this, keyFile, std::get<voice_t>(config)}
     {}
 
-    std::shared_ptr<shell::ShellCommand> shell;
+    explicit Handler(const configall_t& config) :
+        logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
+        shell{std::get<std::shared_ptr<shell::ShellIf>>(config)},
+        helpers{std::get<std::shared_ptr<helpers::HelpersIf>>(config)},
+        filesystem{this, audioDirectory / playbackName},
+        google{this, keyFile, std::get<voice_t>(config)}
+    {}
+
+    bool speak(const std::string& text)
+    {
+        if (std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+            lock.try_lock())
+        {
+            log(logs::level::debug, "Requested text to speak: '" + text + "'");
+            auto audio = google.getaudio(text);
+            filesystem.savetofile(audio);
+            shell->run(playAudioCmd);
+            return true;
+        }
+        log(logs::level::warning,
+            "Cannot speak text: '" + text + "', tts in use");
+        return false;
+    }
+
+    bool speak(const std::string& text, const voice_t& voice)
+    {
+        if (std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+            lock.try_lock())
+        {
+            log(logs::level::debug, "Requested text to speak: '" + text + "'");
+            auto audio = google.getaudio(text, voice);
+            filesystem.savetofile(audio);
+            shell->run(playAudioCmd);
+            return true;
+        }
+        log(logs::level::warning,
+            "Cannot speak text: '" + text + "', tts in use");
+        return false;
+    }
+
+    bool speakasync(const std::string& text)
+    {
+        return helpers->createasync([weak = weak_from_this(), text]() {
+            if (auto self = weak.lock())
+                self->speak(text);
+        });
+    }
+
+    bool speakasync(const std::string& text, const voice_t& voice)
+    {
+        return helpers->createasync([weak = weak_from_this(), text, voice]() {
+            if (auto self = weak.lock())
+                self->speak(text, voice);
+        });
+    }
+
+    void setvoice(const voice_t& voice)
+    {
+        google.setvoice(voice);
+        log(logs::level::debug, "Setting voice to: " + google.getparams());
+    }
+
+    voice_t getvoice() const
+    {
+        return google.getvoice();
+    }
+
+  private:
+    const std::shared_ptr<logs::LogIf> logif;
+    const std::shared_ptr<shell::ShellIf> shell;
+    const std::shared_ptr<helpers::HelpersIf> helpers;
+    std::mutex mtx;
     class Filesystem
     {
       public:
-        Filesystem(const std::string& dirname, const std::string& filename) :
-            basedir{dirname}, filename{filename}
+        Filesystem(const Handler* handler, const std::filesystem::path& path) :
+            handler{handler}, path{path}
         {
             createdirectory();
         }
@@ -68,40 +151,58 @@ struct TextToVoice::Handler
 
         void createdirectory()
         {
-            direxist = !std::filesystem::create_directories(basedir);
+            if ((direxist =
+                     !std::filesystem::create_directories(path.parent_path())))
+                handler->log(logs::level::warning,
+                             "Cannot create already existing directory: '" +
+                                 path.parent_path().native() + "'");
+            else
+                handler->log(logs::level::debug,
+                             "Created directory: '" +
+                                 path.parent_path().native() + "'");
         }
         void removedirectory() const
         {
-            direxist ? false : std::filesystem::remove_all(basedir);
+            direxist ? false : std::filesystem::remove_all(path.parent_path());
+            if (direxist)
+                handler->log(logs::level::warning,
+                             "Not removing previously existed directory: '" +
+                                 path.parent_path().native() + "'");
+            else
+                handler->log(logs::level::debug,
+                             "Removed directory: '" +
+                                 path.parent_path().native() + "'");
         }
 
-        void savetofile(const std::string& content) const
+        void savetofile(const std::string& data) const
         {
-            std::ofstream ofs(basedir + filename, std::ios::binary);
-            ofs << content;
+            std::ofstream ofs(path, std::ios::binary);
+            ofs << data;
+            handler->log(logs::level::debug,
+                         "Written data of size: " + str(data.size()) +
+                             ", to file: '" + path.native() + "'");
         }
 
       private:
-        const std::string basedir;
-        const std::string filename;
+        const Handler* handler;
+        const std::filesystem::path path;
         bool direxist;
     } filesystem;
-
     class Google
     {
       public:
-        Google(const std::string& keyfile, const voice_t& voice) :
+        Google(const Handler* handler, const std::filesystem::path& keyfile,
+               const voice_t& voice) :
+            handler{handler},
             client{texttospeech_type::MakeTextToSpeechConnection(
                 google::cloud::Options{}
                     .set<google::cloud::UnifiedCredentialsOption>(
                         google::cloud::MakeServiceAccountCredentials(
-                            [](const std::string& file) {
+                            [](const std::filesystem::path& file) {
                                 std::ifstream ifs(file);
                                 if (!ifs.is_open())
-                                {
                                     throw std::runtime_error(
                                         "Cannot open key file for TTS");
-                                }
                                 return std::string(
                                     std::istreambuf_iterator<char>(ifs.rdbuf()),
                                     {});
@@ -109,6 +210,16 @@ struct TextToVoice::Handler
         {
             setvoice(voice);
             audio.set_audio_encoding(texttospeech::LINEAR16);
+            handler->log(logs::level::info,
+                         "Created gcloud tts [langcode/langname/gender]: " +
+                             getparams());
+        }
+
+        ~Google()
+        {
+            handler->log(logs::level::info,
+                         "Released gcloud tts [langcode/langname/gender]: " +
+                             getparams());
         }
 
         std::string getaudio(const std::string& text)
@@ -123,6 +234,7 @@ struct TextToVoice::Handler
             const auto mainVoice{voice};
             setvoice(tmpvoice);
             auto response = getaudio(text);
+            handler->log(logs::level::debug, "Text spoken as " + getparams());
             setvoice(mainVoice);
             return response;
         }
@@ -146,45 +258,78 @@ struct TextToVoice::Handler
             params.set_ssml_gender(gender);
         }
 
+        std::string getparams() const
+        {
+            auto gender = params.ssml_gender();
+            return params.language_code() + "/" + params.name() + "/" +
+                   std::string(gender == ssmlgender::MALE     ? "male"
+                               : gender == ssmlgender::FEMALE ? "female"
+                                                              : "unknown");
+        }
+
       private:
+        const Handler* handler;
         texttospeech_type::TextToSpeechClient client;
         texttospeech::SynthesisInput input;
         texttospeech::VoiceSelectionParams params;
         texttospeech::AudioConfig audio;
         voice_t voice;
     } google;
+
+    void log(
+        logs::level level, const std::string& msg,
+        const std::source_location loc = std::source_location::current()) const
+    {
+        if (logif)
+            logif->log(level, std::string{loc.function_name()}, msg);
+    }
 };
 
-TextToVoice::TextToVoice(std::shared_ptr<shell::ShellCommand> shell,
-                         std::shared_ptr<ttshelpers::HelpersIf>,
-                         const voice_t& voice) :
-    handler{std::make_unique<Handler>(shell, voice)}
-{}
-
+TextToVoice::TextToVoice(const config_t& config)
+{
+    handler = std::visit(
+        [](const auto& config) -> decltype(TextToVoice::handler) {
+            if constexpr (!std::is_same<const std::monostate&,
+                                        decltype(config)>())
+            {
+                return std::make_shared<TextToVoice::Handler>(config);
+            }
+            throw std::runtime_error(
+                std::source_location::current().function_name() +
+                "-> config not supported"s);
+        },
+        config);
+}
 TextToVoice::~TextToVoice() = default;
 
-void TextToVoice::speak(const std::string& text)
+bool TextToVoice::speak(const std::string& text)
 {
-    auto audio = handler->google.getaudio(text);
-    handler->filesystem.savetofile(audio);
-    handler->shell->run(playAudioCmd);
+    return handler->speak(text);
 }
 
-void TextToVoice::speak(const std::string& text, const voice_t& voice)
+bool TextToVoice::speak(const std::string& text, const voice_t& voice)
 {
-    auto audio = handler->google.getaudio(text, voice);
-    handler->filesystem.savetofile(audio);
-    handler->shell->run(playAudioCmd);
+    return handler->speak(text, voice);
+}
+
+bool TextToVoice::speakasync(const std::string& text)
+{
+    return handler->speakasync(text);
+}
+
+bool TextToVoice::speakasync(const std::string& text, const voice_t& voice)
+{
+    return handler->speakasync(text, voice);
 }
 
 voice_t TextToVoice::getvoice()
 {
-    return handler->google.getvoice();
+    return handler->getvoice();
 }
 
 void TextToVoice::setvoice(const voice_t& voice)
 {
-    handler->google.setvoice(voice);
+    handler->setvoice(voice);
 }
 
 } // namespace tts::googlecloud

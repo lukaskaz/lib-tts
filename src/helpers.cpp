@@ -1,13 +1,18 @@
 #include "tts/helpers.hpp"
 
+#include "tts/interfaces/texttovoice.hpp"
+
 #include <curl/curl.h>
 #include <curl/easy.h>
 
 #include <fstream>
+#include <future>
 #include <vector>
 
-namespace ttshelpers
+namespace helpers
 {
+
+std::future<void> async;
 
 static size_t DownloadWriteFunction(char* data, size_t size, size_t nmemb,
                                     std::ofstream* ofs)
@@ -17,7 +22,7 @@ static size_t DownloadWriteFunction(char* data, size_t size, size_t nmemb,
     return datasize;
 }
 
-bool Helpers::downloadFile(std::string& url, const std::string& text,
+bool Helpers::downloadFile(const std::string& url, const std::string& text,
                            const std::string& filepath)
 {
     CURLcode res{CURLE_FAILED_INIT};
@@ -26,8 +31,7 @@ bool Helpers::downloadFile(std::string& url, const std::string& text,
         std::ofstream ofs(filepath, std::ios::out | std::ofstream::binary);
         auto escapedtext =
             curl_easy_escape(curl, text.c_str(), (int)text.length());
-        url.append(escapedtext);
-        curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl, CURLOPT_URL, (url + escapedtext).c_str());
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, DownloadWriteFunction);
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, &ofs);
         curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
@@ -72,4 +76,15 @@ bool Helpers::uploadData(const std::string& url, const std::string& datastr,
     return res == CURLE_OK;
 }
 
-} // namespace ttshelpers
+bool Helpers::createasync(std::function<void()>&& func)
+{
+    if (async.valid())
+    {
+        tts::TextToVoiceIf::kill();
+        async.wait();
+    }
+    async = std::async(std::launch::async, std::move(func));
+    return true;
+}
+
+} // namespace helpers
