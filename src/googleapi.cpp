@@ -1,6 +1,7 @@
 #include "tts/interfaces/googleapi.hpp"
 
 #include "shell/interfaces/linux/bash/shell.hpp"
+#include "tts/helpers.hpp"
 
 #include <boost/beast/core/detail/base64.hpp>
 #include <nlohmann/json.hpp>
@@ -15,14 +16,16 @@
 namespace tts::googleapi
 {
 
+using namespace helpers;
 using namespace std::string_literals;
 using json = nlohmann::json;
 
-static const std::string audioDirectory = "audio/";
-static const std::string playbackName = "playback.mp3";
+static const std::filesystem::path configFile = "../conf/init.json";
+static const std::filesystem::path audioDirectory = "audio";
+static const std::filesystem::path playbackName = "playback.mp3";
 static const std::string playAudioCmd =
-    "play --no-show-progress " + audioDirectory + playbackName + " --type alsa";
-static const std::string configFile = "../conf/init.json";
+    "play --no-show-progress " + (audioDirectory / playbackName).native() +
+    " --type alsa";
 static const std::string convUri =
     "https://texttospeech.googleapis.com/v1/text:synthesize";
 
@@ -53,54 +56,71 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
     explicit Handler(const configmin_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{shell::Factory::create<shell::lnx::bash::Shell>()},
-        helpers{helpers::HelpersFactory::create()}, filesystem{audioDirectory,
-                                                               playbackName},
-        google{configFile, helpers, std::get<voice_t>(config)}
+        helpers{helpers::HelpersFactory::create()},
+        filesystem{this, audioDirectory / playbackName},
+        google{this, configFile, helpers, std::get<voice_t>(config)}
     {}
 
     explicit Handler(const configall_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{std::get<std::shared_ptr<shell::ShellIf>>(config)},
         helpers{std::get<std::shared_ptr<helpers::HelpersIf>>(config)},
-        filesystem{audioDirectory, playbackName}, google{
-                                                      configFile, helpers,
-                                                      std::get<voice_t>(config)}
+        filesystem{this, audioDirectory / playbackName},
+        google{this, configFile, helpers, std::get<voice_t>(config)}
     {}
 
     bool speak(const std::string& text)
     {
-        return speak(text, getvoice());
+        if (std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+            lock.try_lock())
+        {
+            log(logs::level::debug, "Requested text to speak: '" + text + "'");
+            auto audio = google.getaudio(text);
+            filesystem.savetofile(audio);
+            shell->run(playAudioCmd);
+            return true;
+        }
+        log(logs::level::warning,
+            "Cannot speak text: '" + text + "', tts in use");
+        return false;
     }
 
     bool speak(const std::string& text, const voice_t& voice)
     {
-        if (std::unique_lock<std::mutex>(mtx, std::try_to_lock).owns_lock())
+        if (std::unique_lock<std::mutex> lock(mtx, std::defer_lock);
+            lock.try_lock())
         {
+            log(logs::level::debug, "Requested text to speak: '" + text + "'");
             auto audio = google.getaudio(text, voice);
             filesystem.savetofile(audio);
             shell->run(playAudioCmd);
             return true;
         }
+        log(logs::level::warning,
+            "Cannot speak text: '" + text + "', tts in use");
         return false;
     }
 
     bool speakasync(const std::string& text)
     {
-        return speakasync(text, getvoice());
+        return helpers->createasync([weak = weak_from_this(), text]() {
+            if (auto self = weak.lock())
+                self->speak(text);
+        });
     }
 
     bool speakasync(const std::string& text, const voice_t& voice)
     {
-        helpers->createasync([weak = weak_from_this(), text, voice]() {
+        return helpers->createasync([weak = weak_from_this(), text, voice]() {
             if (auto self = weak.lock())
                 self->speak(text, voice);
         });
-        return true;
     }
 
     void setvoice(const voice_t& voice)
     {
         google.setvoice(voice);
+        log(logs::level::debug, "Setting voice to: " + google.getparams());
     }
 
     voice_t getvoice() const
@@ -116,8 +136,8 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
     class Filesystem
     {
       public:
-        Filesystem(const std::string& dirname, const std::string& filename) :
-            basedir{dirname}, filename{filename}
+        Filesystem(const Handler* handler, const std::filesystem::path& path) :
+            handler{handler}, path{path}
         {
             createdirectory();
         }
@@ -129,50 +149,76 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
 
         void createdirectory()
         {
-            direxist = !std::filesystem::create_directories(basedir);
+            if ((direxist =
+                     !std::filesystem::create_directories(path.parent_path())))
+                handler->log(logs::level::warning,
+                             "Cannot create already existing directory: '" +
+                                 path.parent_path().native() + "'");
+            else
+                handler->log(logs::level::debug,
+                             "Created directory: '" +
+                                 path.parent_path().native() + "'");
         }
         void removedirectory() const
         {
-            direxist ? false : std::filesystem::remove_all(basedir);
+            direxist ? false : std::filesystem::remove_all(path.parent_path());
+            if (direxist)
+                handler->log(logs::level::warning,
+                             "Not removing previously existed directory: '" +
+                                 path.parent_path().native() + "'");
+            else
+                handler->log(logs::level::debug,
+                             "Removed directory: '" +
+                                 path.parent_path().native() + "'");
         }
 
-        void savetofile(const std::string& content) const
+        void savetofile(const std::string& data) const
         {
-            std::ofstream ofs(basedir + filename, std::ios::binary);
-            ofs << content;
+            std::ofstream ofs(path, std::ios::binary);
+            ofs << data;
+            handler->log(logs::level::debug,
+                         "Written data of size: " + str(data.size()) +
+                             ", to file: '" + path.native() + "'");
         }
 
       private:
-        const std::string basedir;
-        const std::string filename;
+        const Handler* handler;
+        const std::filesystem::path path;
         bool direxist;
     } filesystem;
     class Google
     {
       public:
-        Google(const std::string& configfile,
+        Google(const Handler* handler, const std::filesystem::path& configfile,
                std::shared_ptr<helpers::HelpersIf> helpers,
                const voice_t& voice) :
-            helpers{helpers},
-            audiourl{[](const std::string& file) {
+            handler{handler},
+            helpers{helpers}, audiourl{[](const std::filesystem::path& file) {
                 std::ifstream ifs(file);
                 if (!ifs.is_open())
-                {
                     throw std::runtime_error("Cannot open config file for TTS");
-                }
                 auto content = std::string(
                     std::istreambuf_iterator<char>(ifs.rdbuf()), {});
                 json ttsConfig = json::parse(content)["tts"];
                 if (ttsConfig["key"].is_null() ||
                     ttsConfig["key"].get<std::string>().empty())
-                {
                     throw std::runtime_error(
                         "Cannot get TTS key from config file");
-                }
                 return convUri + "?key=" + ttsConfig["key"].get<std::string>();
             }(configfile)},
             voice{voice}
-        {}
+        {
+            handler->log(logs::level::info,
+                         "Created gapi tts [langcode/langname/gender]: " +
+                             getparams());
+        }
+
+        ~Google()
+        {
+            handler->log(logs::level::info,
+                         "Release gapi tts [langcode/langname/gender]: " +
+                             getparams());
+        }
 
         std::string getaudio(const std::string& text)
         {
@@ -193,6 +239,7 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
             const auto mainVoice{voice};
             voice = tmpvoice;
             auto audio = getaudio(text);
+            handler->log(logs::level::debug, "Text spoken as " + getparams());
             voice = mainVoice;
             return audio;
         }
@@ -207,7 +254,14 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
             this->voice = voice;
         }
 
+        std::string getparams() const
+        {
+            const auto& [code, name, gender] = getmappedvoice();
+            return code + "/" + name + "/" + gender;
+        }
+
       private:
+        const Handler* handler;
         const std::shared_ptr<helpers::HelpersIf> helpers;
         const std::string audiourl;
         voice_t voice;
@@ -246,7 +300,7 @@ TextToVoice::TextToVoice(const config_t& config)
             if constexpr (!std::is_same<const std::monostate&,
                                         decltype(config)>())
             {
-                return std::make_unique<TextToVoice::Handler>(config);
+                return std::make_shared<TextToVoice::Handler>(config);
             }
             throw std::runtime_error(
                 std::source_location::current().function_name() +

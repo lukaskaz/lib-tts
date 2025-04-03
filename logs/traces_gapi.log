@@ -1,0 +1,55 @@
+Logging started at Thu Apr  3 17:09:05 2025
+[20250403_170905.570545][WARN][void tts::googleapi::TextToVoice::Handler::Filesystem::createdirectory()] Cannot create already existing directory: 'audio'
+[20250403_170905.571326][INFO][tts::googleapi::TextToVoice::Handler::Google::Google(const tts::googleapi::TextToVoice::Handler*, const std::filesystem::__cxx11::path&, std::shared_ptr<helpers::HelpersIf>, const tts::voice_t&)] Created gapi tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/FEMALE
+[20250403_170905.571580][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'
+[20250403_170905.800312][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 35072, to file: 'audio/playback.mp3'
+[20250403_170909.169806][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'
+[20250403_170909.335248][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 34816, to file: 'audio/playback.mp3'
+[20250403_170910.180792][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'
+[20250403_170910.349109][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 34816, to file: 'audio/playback.mp3'
+[20250403_170912.180900][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.281137][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.381337][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.481539][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.581742][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.681946][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.782139][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.882319][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170912.982496][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.082667][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.182841][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.283029][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.383202][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.483376][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.583541][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.683702][WARN][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170913.783899][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'
+[20250403_170914.045424][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 35072, to file: 'audio/playback.mp3'
+[20250403_170917.414039][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&, const tts::voice_t&)] Requested text to speak: 'Jestem twoim asystentem, co mam zrobić?'
+[20250403_170917.721837][DBG ][std::string tts::googleapi::TextToVoice::Handler::Google::getaudio(const std::string&, const tts::voice_t&)] Text spoken as pl-PL/pl-PL-Standard-E/FEMALE
+[20250403_170917.722064][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 30208, to file: 'audio/playback.mp3'
+[20250403_170920.626240][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&, const tts::voice_t&)] Requested text to speak: 'Jestem twoim asystentem, co mam zrobić?'
+[20250403_170920.798188][DBG ][std::string tts::googleapi::TextToVoice::Handler::Google::getaudio(const std::string&, const tts::voice_t&)] Text spoken as pl-PL/pl-PL-Standard-A/FEMALE
+[20250403_170920.798419][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 30208, to file: 'audio/playback.mp3'
+[20250403_170923.702342][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&, const tts::voice_t&)] Requested text to speak: 'Jestem twoim asystentem, co mam zrobić?'
+[20250403_170924.054808][DBG ][std::string tts::googleapi::TextToVoice::Handler::Google::getaudio(const std::string&, const tts::voice_t&)] Text spoken as pl-PL/pl-PL-Standard-D/FEMALE
+[20250403_170924.055027][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 30208, to file: 'audio/playback.mp3'
+[20250403_170926.958537][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&, const tts::voice_t&)] Requested text to speak: 'Jestem twoim asystentem, co mam zrobić?'
+[20250403_170927.124505][DBG ][std::string tts::googleapi::TextToVoice::Handler::Google::getaudio(const std::string&, const tts::voice_t&)] Text spoken as pl-PL/pl-PL-Standard-B/MALE
+[20250403_170927.124735][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 30464, to file: 'audio/playback.mp3'
+[20250403_170930.034635][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&, const tts::voice_t&)] Requested text to speak: 'Jestem twoim asystentem, co mam zrobić?'
+[20250403_170930.191348][DBG ][std::string tts::googleapi::TextToVoice::Handler::Google::getaudio(const std::string&, const tts::voice_t&)] Text spoken as pl-PL/pl-PL-Standard-C/MALE
+[20250403_170930.191569][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 30464, to file: 'audio/playback.mp3'
+[20250403_170933.099089][WARN][void tts::googleapi::TextToVoice::Handler::Filesystem::createdirectory()] Cannot create already existing directory: 'audio'
+[20250403_170933.099424][INFO][tts::googleapi::TextToVoice::Handler::Google::Google(const tts::googleapi::TextToVoice::Handler*, const std::filesystem::__cxx11::path&, std::shared_ptr<helpers::HelpersIf>, const tts::voice_t&)] Created gapi tts [langcode/langname/gender]: en-US/en-US-Standard-C/FEMALE
+[20250403_170933.099501][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Hi, this is second speech!'
+[20250403_170933.652323][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 22784, to file: 'audio/playback.mp3'
+[20250403_170935.818989][INFO][tts::googleapi::TextToVoice::Handler::Google::~Google()] Release gapi tts [langcode/langname/gender]: en-US/en-US-Standard-C/FEMALE
+[20250403_170935.819116][WARN][void tts::googleapi::TextToVoice::Handler::Filesystem::removedirectory() const] Not removing previously existed directory: 'audio'
+[20250403_170935.819198][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&, const tts::voice_t&)] Requested text to speak: 'Tschüss, wie gehts du?'
+[20250403_170935.961196][DBG ][std::string tts::googleapi::TextToVoice::Handler::Google::getaudio(const std::string&, const tts::voice_t&)] Text spoken as de-DE/de-DE-Standard-C/FEMALE
+[20250403_170935.961409][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 18944, to file: 'audio/playback.mp3'
+[20250403_170937.847037][DBG ][bool tts::googleapi::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'To wszystko, dzięki :)'
+[20250403_170937.997218][DBG ][void tts::googleapi::TextToVoice::Handler::Filesystem::savetofile(const std::string&) const] Written data of size: 29696, to file: 'audio/playback.mp3'
+[20250403_170940.811208][INFO][tts::googleapi::TextToVoice::Handler::Google::~Google()] Release gapi tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/FEMALE
+[20250403_170940.811333][WARN][void tts::googleapi::TextToVoice::Handler::Filesystem::removedirectory() const] Not removing previously existed directory: 'audio'

@@ -1,0 +1,39 @@
+Logging started at Thu Apr  3 17:05:16 2025
+[20250403_170516.560814][WARN][void tts::googlebasic::TextToVoice::Handler::Filesystem::createdirectory()] Cannot create already existing directory: 'audio'
+[20250403_170516.561000][INFO][tts::googlebasic::TextToVoice::Handler::Google::Google(const tts::googlebasic::TextToVoice::Handler*, std::shared_ptr<helpers::HelpersIf>, const tts::voice_t&, const std::string&)] Created gbasic tts [lang/gender/idx]: pl/male/1
+[20250403_170516.561063][DBG ][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'
+[20250403_170520.654775][DBG ][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'
+[20250403_170521.661876][DBG ][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'
+[20250403_170523.661884][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170523.762227][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170523.862543][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170523.962915][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.063264][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.163638][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.263985][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.364330][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.464561][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.564895][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.665251][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.765583][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.865930][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170524.966282][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.066617][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.166962][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.267174][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.367498][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.467828][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.568143][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.668489][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.768830][WARN][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use
+[20250403_170525.869184][DBG ][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'
+[20250403_170529.963324][WARN][void tts::googlebasic::TextToVoice::Handler::Filesystem::createdirectory()] Cannot create already existing directory: 'audio'
+[20250403_170529.963456][INFO][tts::googlebasic::TextToVoice::Handler::Google::Google(const tts::googlebasic::TextToVoice::Handler*, std::shared_ptr<helpers::HelpersIf>, const tts::voice_t&, const std::string&)] Created gbasic tts [lang/gender/idx]: en/male/1
+[20250403_170529.963509][DBG ][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'Hi, this is second speech!'
+[20250403_170533.039234][INFO][tts::googlebasic::TextToVoice::Handler::Google::~Google()] Release gbasic tts [lang/gender/idx]: en/male/1
+[20250403_170533.039336][WARN][void tts::googlebasic::TextToVoice::Handler::Filesystem::removedirectory() const] Not removing previously existed directory: 'audio'
+[20250403_170533.039390][DBG ][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&, const tts::voice_t&)] Requested text to speak: 'Tschüss, wie gehts du?'
+[20250403_170533.215026][DBG ][void tts::googlebasic::TextToVoice::Handler::Google::getaudio(const std::string&, const tts::voice_t&)] Text spoken as de/male/1
+[20250403_170535.191418][DBG ][bool tts::googlebasic::TextToVoice::Handler::speak(const std::string&)] Requested text to speak: 'To wszystko, dzięki :)'
+[20250403_170538.851664][INFO][tts::googlebasic::TextToVoice::Handler::Google::~Google()] Release gbasic tts [lang/gender/idx]: pl/male/1
+[20250403_170538.851793][WARN][void tts::googlebasic::TextToVoice::Handler::Filesystem::removedirectory() const] Not removing previously existed directory: 'audio'

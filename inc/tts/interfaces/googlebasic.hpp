@@ -33,7 +33,7 @@ class TextToVoice : public TextToVoiceIf
     TextToVoice(const config_t&);
 
     struct Handler;
-    std::unique_ptr<Handler> handler;
+    std::shared_ptr<Handler> handler;
 };
 
 } // namespace tts::googlebasic

@@ -28,10 +28,11 @@ int main(int argc, char** argv)
             auto tts =
                 tts::TextToVoiceFactory::create<TextToVoice, configmin_t>(
                     {{tts::language::polish, tts::gender::female, 1}, logif});
+
             tts->speak("Jestem twoim zwykłym asystentem, co mam zrobić?");
-            tts->speakasync("Jestem twoim async asystentem, co mam zrobić?");
+            tts->speakasync("Jestem twoim asynk asystentem, co mam zrobić?");
             sleep(1);
-            tts->speakasync("Jestem twoim async asystentem, co mam zrobić?");
+            tts->speakasync("Jestem twoim asynk asystentem, co mam zrobić?");
             sleep(2);
             while (
                 !tts->speak("Jestem twoim zwykłym asystentem, co mam zrobić?"))

@@ -24,12 +24,13 @@ using namespace helpers;
 using namespace std::string_literals;
 using ssmlgender = texttospeech::SsmlVoiceGender;
 
-static const std::string audioDirectory = "audio/";
-static const std::string playbackName = "playback.mp3";
+static const std::filesystem::path keyFile = "../conf/key.json";
+static const std::filesystem::path audioDirectory = "audio";
+static const std::filesystem::path playbackName = "playback.mp3";
 static const std::string playAudioCmd =
-    "play --no-show-progress " + audioDirectory + playbackName + " --type alsa";
+    "play --no-show-progress " + (audioDirectory / playbackName).native() +
+    " --type alsa";
 // static constexpr const char* keyEnvVar = "GOOGLE_APPLICATION_CREDENTIALS";
-static const std::string keyFile = "../conf/key.json";
 
 static const std::map<voice_t, std::tuple<std::string, std::string, ssmlgender>>
     voiceMap = {{{language::polish, gender::female, 1},
@@ -57,28 +58,18 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
     explicit Handler(const configmin_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{shell::Factory::create<shell::lnx::bash::Shell>()},
-        helpers{helpers::HelpersFactory::create()}, filesystem{this,
-                                                               audioDirectory,
-                                                               playbackName},
+        helpers{helpers::HelpersFactory::create()},
+        filesystem{this, audioDirectory / playbackName},
         google{this, keyFile, std::get<voice_t>(config)}
-    {
-        log(logs::level::info, "Created tts subsystem");
-    }
+    {}
 
     explicit Handler(const configall_t& config) :
         logif{std::get<std::shared_ptr<logs::LogIf>>(config)},
         shell{std::get<std::shared_ptr<shell::ShellIf>>(config)},
         helpers{std::get<std::shared_ptr<helpers::HelpersIf>>(config)},
-        filesystem{this, audioDirectory, playbackName},
+        filesystem{this, audioDirectory / playbackName},
         google{this, keyFile, std::get<voice_t>(config)}
-    {
-        log(logs::level::info, "Created tts subsystem");
-    }
-
-    ~Handler()
-    {
-        log(logs::level::info, "Released tts subsystem");
-    }
+    {}
 
     bool speak(const std::string& text)
     {
@@ -131,6 +122,7 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
     void setvoice(const voice_t& voice)
     {
         google.setvoice(voice);
+        log(logs::level::debug, "Setting voice to: " + google.getparams());
     }
 
     voice_t getvoice() const
@@ -146,10 +138,8 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
     class Filesystem
     {
       public:
-        Filesystem(const Handler* handler, const std::string& dirname,
-                   const std::string& filename) :
-            handler{handler},
-            basedir{dirname}, filename{filename}
+        Filesystem(const Handler* handler, const std::filesystem::path& path) :
+            handler{handler}, path{path}
         {
             createdirectory();
         }
@@ -161,55 +151,58 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
 
         void createdirectory()
         {
-            if ((direxist = !std::filesystem::create_directories(basedir)))
+            if ((direxist =
+                     !std::filesystem::create_directories(path.parent_path())))
                 handler->log(logs::level::warning,
                              "Cannot create already existing directory: '" +
-                                 basedir + "'");
+                                 path.parent_path().native() + "'");
             else
                 handler->log(logs::level::debug,
-                             "Created directory: '" + basedir + "'");
+                             "Created directory: '" +
+                                 path.parent_path().native() + "'");
         }
         void removedirectory() const
         {
-            direxist ? false : std::filesystem::remove_all(basedir);
+            direxist ? false : std::filesystem::remove_all(path.parent_path());
             if (direxist)
                 handler->log(logs::level::warning,
                              "Not removing previously existed directory: '" +
-                                 basedir + "'");
+                                 path.parent_path().native() + "'");
             else
                 handler->log(logs::level::debug,
-                             "Removed directory: '" + basedir + "'");
+                             "Removed directory: '" +
+                                 path.parent_path().native() + "'");
         }
 
-        void savetofile(const std::string& content) const
+        void savetofile(const std::string& data) const
         {
-            std::ofstream ofs(basedir + filename, std::ios::binary);
-            ofs << content;
+            std::ofstream ofs(path, std::ios::binary);
+            ofs << data;
+            handler->log(logs::level::debug,
+                         "Written data of size: " + str(data.size()) +
+                             ", to file: '" + path.native() + "'");
         }
 
       private:
         const Handler* handler;
-        const std::string basedir;
-        const std::string filename;
+        const std::filesystem::path path;
         bool direxist;
     } filesystem;
     class Google
     {
       public:
-        Google(const Handler* handler, const std::string& keyfile,
+        Google(const Handler* handler, const std::filesystem::path& keyfile,
                const voice_t& voice) :
             handler{handler},
             client{texttospeech_type::MakeTextToSpeechConnection(
                 google::cloud::Options{}
                     .set<google::cloud::UnifiedCredentialsOption>(
                         google::cloud::MakeServiceAccountCredentials(
-                            [](const std::string& file) {
+                            [](const std::filesystem::path& file) {
                                 std::ifstream ifs(file);
                                 if (!ifs.is_open())
-                                {
                                     throw std::runtime_error(
                                         "Cannot open key file for TTS");
-                                }
                                 return std::string(
                                     std::istreambuf_iterator<char>(ifs.rdbuf()),
                                     {});
