@@ -1,3 +1,11 @@
+> To stop pulseaudio:
+systemctl --user stop pulseaudio.socket
+systemctl --user stop pulseaudio.service
+
+> To start pulseaudio:
+systemctl --user start pulseaudio.socket
+systemctl --user start pulseaudio.service
+
 $ aplay -l
 $ arecord -l
 

@@ -25,6 +25,7 @@ class TextToVoice : public TextToVoiceIf
     bool speak(const std::string&, const voice_t&) override;
     bool speakasync(const std::string&) override;
     bool speakasync(const std::string&, const voice_t&) override;
+    bool waitspoken() override;
     voice_t getvoice() override;
     void setvoice(const voice_t&) override;
 

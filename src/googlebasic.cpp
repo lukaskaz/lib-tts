@@ -103,6 +103,11 @@ struct TextToVoice::Handler : public std::enable_shared_from_this<Handler>
         log(logs::level::debug, "Setting voice to: " + google.getparams());
     }
 
+    bool waitspoken() const
+    {
+        return helpers->waitasync();
+    }
+
     voice_t getvoice() const
     {
         return google.getvoice();
@@ -277,6 +282,11 @@ bool TextToVoice::speakasync(const std::string& text)
 bool TextToVoice::speakasync(const std::string& text, const voice_t& voice)
 {
     return handler->speakasync(text, voice);
+}
+
+bool TextToVoice::waitspoken()
+{
+    return handler->waitspoken();
 }
 
 voice_t TextToVoice::getvoice()
