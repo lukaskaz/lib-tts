@@ -17,6 +17,8 @@ class HelpersIf
     virtual bool downloadFile(const std::string&, const std::string&,
                               const std::string&) = 0;
     virtual bool createasync(std::function<void()>&&) = 0;
+    virtual bool waitasync() = 0;
+    virtual bool killasync() = 0;
 };
 
 class Helpers : public HelpersIf
@@ -27,7 +29,9 @@ class Helpers : public HelpersIf
     bool downloadFile(const std::string&, const std::string&,
                       const std::string&) override;
 
-    bool createasync(std::function<void()>&&);
+    bool createasync(std::function<void()>&&) override;
+    bool waitasync() override;
+    bool killasync() override;
 
   private:
     friend class HelpersFactory;
