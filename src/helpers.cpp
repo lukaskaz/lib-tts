@@ -78,13 +78,29 @@ bool Helpers::uploadData(const std::string& url, const std::string& datastr,
 
 bool Helpers::createasync(std::function<void()>&& func)
 {
+    killasync();
+    async = std::async(std::launch::async, std::move(func));
+    return true;
+}
+
+bool Helpers::waitasync()
+{
+    if (async.valid())
+    {
+        async.wait();
+        return true;
+    }
+    return false;
+}
+
+bool Helpers::killasync()
+{
     if (async.valid())
     {
         tts::TextToVoiceIf::kill();
-        async.wait();
+        return waitasync();
     }
-    async = std::async(std::launch::async, std::move(func));
-    return true;
+    return false;
 }
 
 } // namespace helpers

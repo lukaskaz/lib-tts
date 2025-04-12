@@ -33,10 +33,10 @@ int main(int argc, char** argv)
             tts->speakasync("Jestem twoim asynk asystentem, co mam zrobić?");
             sleep(1);
             tts->speakasync("Jestem twoim asynk asystentem, co mam zrobić?");
-            sleep(2);
-            while (
-                !tts->speak("Jestem twoim zwykłym asystentem, co mam zrobić?"))
-                usleep(100 * 1000);
+            sleep(1);
+            tts->speak("Jestem twoim zwykłym asystentem, co mam zrobić?");
+            tts->waitspoken();
+            tts->speak("Jestem twoim zwykłym asystentem, co mam zrobić?");
 
             tts->speak("Jestem twoim asystentem, co mam zrobić?",
                        {tts::language::polish, tts::gender::female, 1});

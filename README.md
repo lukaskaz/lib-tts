@@ -5,26 +5,6 @@ Library for text to voice conversions
 pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googlebasic/googlebasic 0<br>
 [INFO] Created gbasic tts [lang/gender/idx]: pl/male/1<br>
 [WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [WARN] Cannot create already existing directory: 'audio'<br>
 [INFO] Created gbasic tts [lang/gender/idx]: en/male/1<br>
 [INFO] Released gbasic tts [lang/gender/idx]: en/male/1<br>
@@ -37,27 +17,6 @@ pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googlebasic/googlebasic 1<br>
 [DBG ] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'<br>
 [DBG ] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'<br>
 [DBG ] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [DBG ] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'<br>
 [WARN] Cannot create already existing directory: 'audio'<br>
@@ -74,28 +33,12 @@ pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googlebasic/googlebasic 1<br>
 pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googleapi/googleapi 0<br>
 [INFO] Created gapi tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/FEMALE<br>
 [WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [WARN] Cannot create already existing directory: 'audio'<br>
 [INFO] Created gapi tts [langcode/langname/gender]: en-US/en-US-Standard-C/FEMALE<br>
 [INFO] Released gapi tts [langcode/langname/gender]: en-US/en-US-Standard-C/FEMALE<br>
 [WARN] Not removing previously existed directory: 'audio'<br>
 [INFO] Released gapi tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/FEMALE<br>
-<br>
+<br><br>
 pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googleapi/googleapi 1<br>
 [DBG ] Created directory: 'audio'<br>
 [INFO] Created gapi tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/FEMALE<br>
@@ -105,21 +48,6 @@ pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googleapi/googleapi 1<br>
 [DBG ] Written data of size: 34816, to file: 'audio/playback.mp3'<br>
 [DBG ] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'<br>
 [DBG ] Written data of size: 34816, to file: 'audio/playback.mp3'<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [DBG ] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'<br>
 [DBG ] Written data of size: 35072, to file: 'audio/playback.mp3'<br>
@@ -155,26 +83,12 @@ pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googleapi/googleapi 1<br>
 pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googlecloud/googlecloud 0<br>
 [INFO] Created gcloud tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/female<br>
 [WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [WARN] Cannot create already existing directory: 'audio'<br>
 [INFO] Created gcloud tts [langcode/langname/gender]: en-US/en-US-Standard-C/female<br>
 [INFO] Released gcloud tts [langcode/langname/gender]: en-US/en-US-Standard-C/female<br>
 [WARN] Not removing previously existed directory: 'audio'<br>
 [INFO] Released gcloud tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/female<br>
+[INFO] Released gcloud tts [langcode/langname/gender]: pl-PL/pl-PL-Standard-E/female<br><br>
 <br>
 pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googlecloud/googlecloud 1<br>
 [DBG ] Created directory: 'audio'<br>
@@ -185,19 +99,6 @@ pi@raspberrypi:\~/git/lib-tts/build $ ./examples/googlecloud/googlecloud 1<br>
 [DBG ] Written data of size: 152364, to file: 'audio/playback.mp3'<br>
 [DBG ] Requested text to speak: 'Jestem twoim asynk asystentem, co mam zrobić?'<br>
 [DBG ] Written data of size: 152364, to file: 'audio/playback.mp3'<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
-[WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [WARN] Cannot speak text: 'Jestem twoim zwykłym asystentem, co mam zrobić?', tts in use<br>
 [DBG ] Requested text to speak: 'Jestem twoim zwykłym asystentem, co mam zrobić?'<br>
 [DBG ] Written data of size: 154342, to file: 'audio/playback.mp3'<br>
